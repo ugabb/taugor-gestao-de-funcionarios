@@ -1,0 +1,31 @@
+
+{
+    "contatoInfo": {
+        "id": "qualquer id",
+        "name": "Gabriel Silva Barros",
+        "gender": "Masculino",
+        "address": {
+            "cep": "72151-705",
+            "logradouro": "QNL 17 conjunto E",
+            "number": 9,
+            "uf": "DF"
+        },
+        "phone": "(61)986087431",
+        "profilePicture": "https://media.licdn.com/dms/image/D4D03AQFpQjP5ynXtKw/profile-displayphoto-shrink_800_800/0/1678209503192?e=1703721600&v=beta&t=Q8FyueRmrLSV4MClOcGDvCiCrrFjNBH7vFoPJ7uOEJw",
+        "birthday": {
+            "day": 25,
+            "month": 12,
+            "year": 2001
+        }
+    },
+    "funcionarioInfo": {
+        "role": "Assitente Técnico",
+        "admissioDate": {
+            "day": 26,
+            "month": 10,
+            "year": 2023
+        },
+        "sector": "Contabilidade",
+        "salary": 2345.79
+    }
+}
