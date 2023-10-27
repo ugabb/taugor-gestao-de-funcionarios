@@ -1,7 +1,7 @@
 import express, { Request, Response } from "express";
 import router from './routes/FuncionarioRoutes'
 import admin from 'firebase-admin'
-import { Funcionario } from "./models/funcionario";
+import { Funcionario } from "./models/FuncionarioSchema";
 
 const PORT = process.env.PORT || 8080;
 
