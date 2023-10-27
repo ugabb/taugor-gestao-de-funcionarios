@@ -14,8 +14,6 @@ export const getAll = async () => {
         snapshot.forEach((doc) => {
             funcionarios.push(Object.assign({ id: doc.id }, doc.data()));
         })
-
-        console.log(funcionarios)
         return funcionarios
     } catch (error) {
         console.error('Erro ao buscar funcionários:', error);
@@ -33,6 +31,17 @@ export const getById = async (id: string) => {
         }
 
         return funcionario.data()
+    } catch (error) {
+        console.error('Erro ao buscar funcionário por ID:', error);
+        throw error;
+    }
+}
+
+export const update = async (id: string, data: any) => {
+    try {
+        const funcionarioRef = db.collection("funcionario").doc(id)
+        // atualizar apenas os campos especificados sem substituir o documento inteiro
+        await funcionarioRef.set(data, { merge: true })
     } catch (error) {
         console.error('Erro ao buscar funcionário por ID:', error);
         throw error;
