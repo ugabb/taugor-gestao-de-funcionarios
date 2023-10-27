@@ -22,15 +22,15 @@ export const create = async (data: Funcionario) => {
 export const getAll = async () => {
     try {
         const funcionarioRef = db.collection("funcionario")
-        const response = await funcionarioRef.get()
-        // let responseArray: any[] = []
+        const snapshot = await funcionarioRef.get()
+        let funcionarios: any[] = []
 
-        // response.forEach((doc) => {
-        //     responseArray.push(doc.data)
-        //     console.log("-",doc.data)
-        // })
-        console.log(response.)
-        return response
+        snapshot.forEach((doc) => {
+            funcionarios.push(doc.data());
+        })
+
+        console.log(funcionarios)
+        return funcionarios
     } catch (error) {
         console.log(error)
     }
