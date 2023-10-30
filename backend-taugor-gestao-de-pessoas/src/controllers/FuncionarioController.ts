@@ -18,7 +18,8 @@ export const createFuncionario = async (req: Request, res: Response) => {
 // GET -> /api/funcionario
 export const getAllFuncionarios = async (req: Request, res: Response) => {
     try {
-        res.status(200).json(await getAll()).send("Funcionários retornado com sucesso")
+
+        res.status(200).json({ message: 'Funcionário retornado com sucesso', funcionarios: await getAll() });
     } catch (error) {
         console.error(`Erro ao retornar todos os Funcionários`, error);
         return res.status(500).send({ message: 'Erro ao retornar Funcionários', error: error.message });
