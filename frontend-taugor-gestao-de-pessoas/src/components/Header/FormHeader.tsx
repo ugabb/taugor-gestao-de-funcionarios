@@ -7,7 +7,7 @@ const Header = () => {
     return (
         <header className='flex flex-col lg:flex-row items-center justify-between '>
             <div className='flex items-center flex-col lg:flex-row '>
-                <Image src={'/marca-taugor.png'} alt='logo Taugor' width={180} height={109} className='border-r' />
+                <Image src={'/marca-taugor.png'} alt='logo Taugor' width={180} height={109} className='lg:border-r' />
 
                 <div className='ml-10'>
                     <p className='text-gray-400 text-xs'>PASSO 2 DE 6</p>

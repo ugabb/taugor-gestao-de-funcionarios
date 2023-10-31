@@ -18,3 +18,27 @@
 body {
   font-family: 'Roboto', sans-serif;
 }
+
+.a4 {
+  height: 95%;
+  width: 90%;
+}
+
+.without-border-top {
+  border: 1px solid var(--primaryColor);
+  border-top: 0;
+}
+
+.input {
+  border: none;
+  border-radius: .3rem;
+  background-color: rgb(243 244 246);
+  padding: .5rem 1rem;
+
+  transition: .4s ease-in-out;
+}
+
+.input:focus {
+  outline: none;
+  border: 1px solid var(--primaryColor);
+}
