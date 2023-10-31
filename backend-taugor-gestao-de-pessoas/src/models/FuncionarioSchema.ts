@@ -21,6 +21,7 @@ const AdmissioDateSchema = z.object({
 
 const ContatoInfoSchema = z.object({
   name: z.string(),
+  lastName: z.string(),
   gender: z.string(),
   address: AddressSchema,
   phone: z.string(),
