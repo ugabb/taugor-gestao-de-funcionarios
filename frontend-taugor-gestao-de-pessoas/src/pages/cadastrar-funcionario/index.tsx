@@ -57,27 +57,34 @@ const index = () => {
     console.log(funcionarioData)
   }
 
+
   const syncronizeWithDocument = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    if (name.includes('.')) {
-      const [objKey, subKey] = name.split('.');
-      setFuncionario((prev) => ({
-        ...prev,
-        [objKey]: {
-          ...prev[objKey as keyof IFuncionario],
-          [subKey]: value,
-        },
-      }));
+    console.log('E:', e.target);
+    console.log('Name:', name);
+    console.log('Value:', value);
+    const updatedFuncionario = { ...funcionario };
+    if (name.includes("address")) {
+      console.log("fge")
+      const addressKey = name.split(".")[1];
+      updatedFuncionario.contatoInfo.address[addressKey] = value;
+    } else if (name.includes("birthday")) {
+      const birthdayKey = name.split(".")[1];
+      updatedFuncionario.contatoInfo.birthday[birthdayKey] = parseInt(value);
+    } else if (name.includes("admissioDate")) {
+      const admissioDateKey = name.split(".")[1];
+      updatedFuncionario.funcionarioInfo.admissioDate[admissioDateKey] = parseInt(value);
+    } else if (name.includes("name") || name.includes("lastName") || name.includes("phone")) {
+      console.log('Name:', name);
+      console.log('Value:', value);
+      updatedFuncionario.contatoInfo[name] = value;
     } else {
-      setFuncionario((prev) => ({
-        ...prev,
-        contatoInfo: {
-          ...prev.contatoInfo,
-          [name]: value,
-        },
-      }));
+      updatedFuncionario.funcionarioInfo[name] = value;
     }
+    setFuncionario(updatedFuncionario);
+    console.log('Updated Funcionario:', updatedFuncionario);
   };
+
 
   return (
     <div >
@@ -144,10 +151,10 @@ const index = () => {
 
               <div className="w-full flex flex-col gap-3">
                 <div className="flex flex-col md:flex-row gap-3 w-full">
-                  <input {...register("cep")} type='text' className='input w-full' placeholder='CEP' onChange={syncronizeWithDocument} />
+                  <input {...register("cep")} type='text' className='input w-full' placeholder='CEP' onChange={syncronizeWithDocument} name="address.cep" />
                   <div className="flex gap-3">
-                    <input {...register("number")} type='text' className='input w-full' placeholder='Número' onChange={syncronizeWithDocument} />
-                    <input {...register("uf")} type='text' className='input w-full' placeholder='UF' />
+                    <input {...register("number")} type='text' className='input w-full' placeholder='Número' onChange={syncronizeWithDocument} name="address.number" />
+                    <input {...register("uf")} type='text' className='input w-full' placeholder='UF' onChange={syncronizeWithDocument} name="address.uf" />
                   </div>
                 </div>
                 <input {...register("logradouro")} type='text' className='input' placeholder='Logradouro' onChange={syncronizeWithDocument} />
@@ -180,13 +187,20 @@ const index = () => {
         </section>
 
 
-        <section className=' bg-gray-100 flex justify-center items-center lg:w-1/2 h-screen'>
+        <section className=' bg-gray-100 flex justify-center items-center lg:w-1/2 h-screen' id='document'>
           <div className='bg-white a4 shadow-lg rounded-sm p-10 flex flex-col gap-3'>
             <div className={`without-border-top px-3 `} >
               <h1 className='text-primaryColor text-xl'>{funcionario?.contatoInfo?.name} {funcionario?.contatoInfo?.lastName}</h1>
-              <p className='text-xs text-gray-500'>Cargo: {funcionario?.contatoInfo?.role}</p>
-              <p className='text-xs text-gray-500'>Setor: {funcionario?.contatoInfo?.sector}</p>
-              <p className='text-xs text-gray-500'>Salário: {funcionario?.contatoInfo?.salary}</p>
+              <p className='text-xs text-gray-500'>Cargo: {funcionario?.funcionarioInfo?.role}</p>
+              <p className='text-xs text-gray-500'>Setor: {funcionario?.funcionarioInfo?.sector}</p>
+              <p className='text-xs text-gray-500'>Salário: {funcionario?.funcionarioInfo?.salary}</p>
+              <p className='text-xs text-gray-500'>CEP: {funcionario?.contatoInfo?.address?.cep}</p>
+              <p className='text-xs text-gray-500'>Número: {funcionario?.contatoInfo?.address?.number}</p>
+              <p className='text-xs text-gray-500'>UF: {funcionario?.contatoInfo?.address?.uf}</p>
+              <p className='text-xs text-gray-500'>Telefone: {funcionario?.contatoInfo?.phone}</p>
+              {/* <p className='text-xs text-gray-500'>email: {funcionario.contatoInfo.}</p> */}
+              {/* <p className='text-xs text-gray-500'>birthday: {funcionario.contatoInfo.birthday}</p> */}
+              {/* <p className='text-xs text-gray-500'>data admissao: {funcionario.funcionarioInfo.admissioDate}</p> */}
             </div>
             <div className='border border-primaryColor px-3 '>
               <h1 className='text-primaryColor text-xl'>Gabriel Barros</h1>
