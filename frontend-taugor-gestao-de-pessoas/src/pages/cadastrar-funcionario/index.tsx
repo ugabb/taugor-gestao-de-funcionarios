@@ -1,5 +1,5 @@
 import FormHeader from '@/components/Header/FormHeader'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 //react icons
 import { RiPencilFill } from 'react-icons/ri'
@@ -52,38 +52,31 @@ const index = () => {
   const [funcionario, setFuncionario] = useState<IFuncionario>(initialFuncionarioState)
   const { register, handleSubmit } = useForm()
 
-  const onSubmit = (funcionarioData) => {
+  const onSubmit = (funcionarioData: IFuncionario) => {
     setFuncionario(funcionarioData)
-    console.log(funcionarioData)
+    console.log(funcionario)
   }
+
+  // useEffect(() => {
+  //   console.log(funcionario)
+  // },[funcionario])
 
 
   const syncronizeWithDocument = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    console.log('E:', e.target);
-    console.log('Name:', name);
-    console.log('Value:', value);
-    const updatedFuncionario = { ...funcionario };
-    if (name.includes("address")) {
-      console.log("fge")
-      const addressKey = name.split(".")[1];
-      updatedFuncionario.contatoInfo.address[addressKey] = value;
-    } else if (name.includes("birthday")) {
-      const birthdayKey = name.split(".")[1];
-      updatedFuncionario.contatoInfo.birthday[birthdayKey] = parseInt(value);
-    } else if (name.includes("admissioDate")) {
-      const admissioDateKey = name.split(".")[1];
-      updatedFuncionario.funcionarioInfo.admissioDate[admissioDateKey] = parseInt(value);
-    } else if (name.includes("name") || name.includes("lastName") || name.includes("phone")) {
-      console.log('Name:', name);
-      console.log('Value:', value);
-      updatedFuncionario.contatoInfo[name] = value;
-    } else {
-      updatedFuncionario.funcionarioInfo[name] = value;
-    }
-    setFuncionario(updatedFuncionario);
-    console.log('Updated Funcionario:', updatedFuncionario);
+    setFuncionario((prevState) => ({
+      ...prevState,
+      contatoInfo: {
+        ...prevState.contatoInfo,
+        [name]: value,
+      },
+      funcionarioInfo: {
+        ...prevState.funcionarioInfo,
+        [name]: value,
+      },
+    }));
   };
+  
 
 
   return (
@@ -151,10 +144,10 @@ const index = () => {
 
               <div className="w-full flex flex-col gap-3">
                 <div className="flex flex-col md:flex-row gap-3 w-full">
-                  <input {...register("cep")} type='text' className='input w-full' placeholder='CEP' onChange={syncronizeWithDocument} name="address.cep" />
+                  <input {...register("cep")} type='text' className='input w-full' placeholder='CEP' onChange={syncronizeWithDocument} />
                   <div className="flex gap-3">
-                    <input {...register("number")} type='text' className='input w-full' placeholder='Número' onChange={syncronizeWithDocument} name="address.number" />
-                    <input {...register("uf")} type='text' className='input w-full' placeholder='UF' onChange={syncronizeWithDocument} name="address.uf" />
+                    <input {...register("number")} type='text' className='input w-full' placeholder='Número' onChange={syncronizeWithDocument}  />
+                    <input {...register("uf")} type='text' className='input w-full' placeholder='UF' onChange={syncronizeWithDocument}  />
                   </div>
                 </div>
                 <input {...register("logradouro")} type='text' className='input' placeholder='Logradouro' onChange={syncronizeWithDocument} />
