@@ -13,6 +13,7 @@
     "@emotion/styled": "^11.11.0",
     "@mui/material": "^5.14.15",
     "@mui/x-date-pickers": "^6.17.0",
+    "axios": "^1.6.0",
     "firebase": "^10.5.2",
     "next": "14.0.0",
     "react": "^18",
