@@ -4,6 +4,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import { IFuncionario } from '@/IFuncionario';
+import { useState } from 'react';
 
 type Prop = {
     handleOpen: Function
@@ -12,6 +13,7 @@ type Prop = {
     createFuncionario: Function
     funcionario: IFuncionario
 }
+
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -34,7 +36,7 @@ const ModalCreateFuncionario = ({ funcionario, open, handleClose, createFunciona
     return (
         <Modal
             open={open}
-            onClose={handleClose}
+            onClose={() => handleClose()}
             aria-labelledby="modal-modal-title"
             aria-describedby="modal-modal-description"
         >
