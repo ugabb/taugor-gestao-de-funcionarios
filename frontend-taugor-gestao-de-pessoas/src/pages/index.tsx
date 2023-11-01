@@ -6,6 +6,7 @@ import Link from 'next/link';
 
 // Material UI
 import { Button, TextField } from '@mui/material'
+import Header from '@/components/Header/Header';
 
 export default function Home() {
 
@@ -24,31 +25,35 @@ export default function Home() {
     }
   }, [])
 
+ 
+
   return (
-    <div className='flex flex-col justify-center items-center gap-5 h-screen'>
-      <h1 className='text-3xl font-semibold text-primaryColor'>Taugor</h1>
-      <h2 className='text-xl font-semibold text-primaryColor'>Gerenciamento de funcionários</h2>
+    <div className='flex flex-col justify-center '>
+      <Header />
 
-      {
-        authUser ?
-          <div>
-            <h3>Bem Vindo</h3>
-            <p>Gerenciar Funcionários</p>
-          </div>
-          :
-          <>
-            <Link href={'/login'}>
-              <Button variant="outlined" type='submit' size="large">Log In</Button>
-            </Link>
+      <main className='flex flex-col justify-center items-center mt-40'>
+        <h1 className='text-3xl font-semibold text-primaryColor'>Taugor</h1>
+        <h2 className='text-xl font-semibold text-primaryColor'>Gerenciamento de funcionários</h2>
+
+        {
+          authUser ?
             <div>
-              <p>Ou faça <Link href={'/sign-up'}>
-                <Button variant="text" type='submit' size='small'>Sign Up</Button>
-              </Link></p>
+              <h3>Bem Vindo</h3>
+              <p>Gerenciar Funcionários</p>
             </div>
-          </>
-      }
-
-
+            :
+            <>
+              <Link href={'/login'}>
+                <Button variant="outlined" type='submit' size="large">Log In</Button>
+              </Link>
+              <div>
+                <p>Ou faça <Link href={'/sign-up'}>
+                  <Button variant="text" type='submit' size='small'>Sign Up</Button>
+                </Link></p>
+              </div>
+            </>
+        }
+      </main>
 
     </div>
   )

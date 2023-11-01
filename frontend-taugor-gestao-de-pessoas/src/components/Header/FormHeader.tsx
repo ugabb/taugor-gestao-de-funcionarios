@@ -1,9 +1,10 @@
 import Image from 'next/image'
+import Link from 'next/link'
 import React from 'react'
 
 import { IoMdHome } from 'react-icons/io'
 
-const Header = () => {
+const FormHeader = () => {
     return (
         <header className='flex flex-col lg:flex-row items-center justify-between '>
             <div className='flex items-center flex-col lg:flex-row '>
@@ -15,12 +16,12 @@ const Header = () => {
                 </div>
             </div>
 
-            <div className="hidden text-xl text-gray-400 p-5 border-l lg:block">
-                <IoMdHome />
-            </div>
+            <Link href={"/"} className="hidden text-xl text-gray-400 p-5 border-l lg:block">
+                <IoMdHome className="cursor-pointer transition-all hover:text-primaryColor" />
+            </Link>
 
         </header>
     )
 }
 
-export default Header
+export default FormHeader
