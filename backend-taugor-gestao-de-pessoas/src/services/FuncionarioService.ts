@@ -103,3 +103,25 @@ export const endContractById = async (id: string) => {
         throw error;
     }
 };
+
+export const fireById = async (id: string) => {
+    try {
+        const funcionarioRef = db.collection('funcionario').doc(id);
+        const funcionario = await funcionarioRef.get();
+
+        if (!funcionario.exists) {
+            throw new Error('Nenhum funcionário com esse ID!');
+        } else {
+            const funcionarioData = funcionario.data();
+            if (funcionarioData) {
+                await funcionarioRef.update({
+                    'funcionarioInfo.isFired': true,
+                });
+                console.log('Demitido com sucesso!');
+            }
+        }
+    } catch (error) {
+        console.error('Erro ao demitir contrato:', error);
+        throw error;
+    }
+};

@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { create, deleteById, endContractById, getAll, getById, update } from '../services/FuncionarioService'
+import { create, deleteById, endContractById, fireById, getAll, getById, update } from '../services/FuncionarioService'
 import { FuncionarioSchema } from "../models/FuncionarioSchema";
 
 
@@ -69,7 +69,20 @@ export const endFuncionarioContractById = async (req: Request, res: Response) =>
         await endContractById(id)
         res.status(200).json({ message: 'Contrato finalizado com sucesso' })
     } catch (error) {
-        console.log(`Error while updating Funcionario `, error);
-        return res.status(500).send('Erro ao atualizar funcionário');
+        console.log(`Erro ao terminar contrato com funcionário`, error);
+        return res.status(500).send('Erro ao terminar contrato com funcionário');
+    }
+}
+
+// PATCH -> /api/funcionario/end-contract/:id
+// controller para demitir funcionario
+export const fireFuncionarioById = async (req: Request, res: Response) => {
+    try {
+        const { id } = req.params
+        await fireById(id)
+        res.status(200).json({ message: 'Demitido com sucesso' })
+    } catch (error) {
+        console.log(`Erro ao Demitir funcionário `, error);
+        return res.status(500).send('Erro ao Demitir funcionário');
     }
 }
