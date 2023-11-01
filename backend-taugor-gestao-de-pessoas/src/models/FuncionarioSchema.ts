@@ -7,31 +7,20 @@ const AddressSchema = z.object({
   uf: z.string(),
 });
 
-const BirthdaySchema = z.object({
-  day: z.number(),
-  month: z.number(),
-  year: z.number(),
-});
-
-const AdmissioDateSchema = z.object({
-  day: z.number(),
-  month: z.number(),
-  year: z.number(),
-});
-
 const ContatoInfoSchema = z.object({
   name: z.string(),
   lastName: z.string(),
+  email: z.string().email(),
   gender: z.string(),
   address: AddressSchema,
   phone: z.string(),
   profilePicture: z.string(),
-  birthday: BirthdaySchema,
+  birthday: z.date(),
 });
 
 const FuncionarioInfoSchema = z.object({
   role: z.string(),
-  admissioDate: AdmissioDateSchema,
+  admissioDate: z.date(),
   sector: z.string(),
   salary: z.number(),
 });

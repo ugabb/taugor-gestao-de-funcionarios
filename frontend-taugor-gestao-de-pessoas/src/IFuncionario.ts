@@ -5,31 +5,20 @@ interface AddressInfo {
     uf: string;
 }
 
-interface BirthdayInfo {
-    day: number;
-    month: number;
-    year: number;
-}
-
-interface AdmissioDateInfo {
-    day: number;
-    month: number;
-    year: number;
-}
-
 interface ContatoInfo {
     name: string;
     lastName: string;
+    email: string;
     gender: string;
     address: AddressInfo;
     phone: string;
     profilePicture: string;
-    birthday: BirthdayInfo;
+    birthday: Date;
 }
 
 interface FuncionarioInfo {
     role: string;
-    admissioDate: AdmissioDateInfo;
+    admissioDate: Date;
     sector: string;
     salary: number;
 }
