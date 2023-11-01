@@ -23,6 +23,8 @@ const FuncionarioInfoSchema = z.object({
   admissioDate: z.string(),
   sector: z.string(),
   salary: z.number(),
+  isFired: z.boolean().default(false).optional(),
+  isContractEnded: z.boolean().default(false).optional()
 });
 
 export const FuncionarioSchema = z.object({
