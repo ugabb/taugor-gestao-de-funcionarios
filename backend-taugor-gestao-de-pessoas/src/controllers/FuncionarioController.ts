@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { create, deleteById, getAll, getById, update } from '../services/FuncionarioService'
+import { create, deleteById, endContractById, getAll, getById, update } from '../services/FuncionarioService'
 import { FuncionarioSchema } from "../models/FuncionarioSchema";
 
 
@@ -19,7 +19,7 @@ export const createFuncionario = async (req: Request, res: Response) => {
 export const getAllFuncionarios = async (req: Request, res: Response) => {
     try {
 
-        res.status(200).json({ message: 'Funcionário retornado com sucesso', funcionarios: await getAll() });
+        res.status(200).json({ message: 'Funcionários retornado com sucesso', funcionarios: await getAll() });
     } catch (error) {
         console.error(`Erro ao retornar todos os Funcionários`, error);
         return res.status(500).send({ message: 'Erro ao retornar Funcionários', error: error.message });
@@ -30,7 +30,7 @@ export const getAllFuncionarios = async (req: Request, res: Response) => {
 export const getFuncionarioById = async (req: Request, res: Response) => {
     try {
         const { id } = req.params
-        res.json(await getById(id))
+        res.status(200).json({ message: 'Funcionário retornado com sucesso', funcionarios: await getById(id) })
     } catch (error) {
         console.error('Erro ao retornar Funcionário:', error);
         return res.status(500).send({ message: 'Erro ao retornar Funcionário', error: error.message });
@@ -42,7 +42,7 @@ export const updateFuncionarioById = async (req: Request, res: Response) => {
     try {
         const validatedFuncionario = FuncionarioSchema.parse(req.body)
         const { id } = req.params
-        return res.status(200).json(await update(id, validatedFuncionario)).send({ message: "Funcionario Atualizado com sucesso" })
+        res.status(200).json({ message: 'Funcionário atualizado com sucesso', funcionariosUpdated: await update(id, validatedFuncionario) })
     } catch (error) {
         console.log(`Error while updating Funcionario `, error);
         return res.status(500).send('Erro ao atualizar funcionário');
@@ -58,5 +58,18 @@ export const deleteFuncionarioById = async (req: Request, res: Response) => {
     } catch (error) {
         console.error('Erro ao excluir funcionário:', error);
         return res.status(500).send({ message: 'Erro ao excluir funcionário', error: error.message });
+    }
+}
+
+// PATCH -> /api/funcionario/end-contract/:id
+// controller para terminar o contrato
+export const endFuncionarioContractById = async (req: Request, res: Response) => {
+    try {
+        const { id } = req.params
+        await endContractById(id)
+        res.status(200).json({ message: 'Contrato finalizado com sucesso' })
+    } catch (error) {
+        console.log(`Error while updating Funcionario `, error);
+        return res.status(500).send('Erro ao atualizar funcionário');
     }
 }

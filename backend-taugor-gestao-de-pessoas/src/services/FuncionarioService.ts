@@ -58,6 +58,8 @@ export const update = async (id: string, data: any) => {
         const funcionarioRef = db.collection("funcionario").doc(id)
         // atualizar apenas os campos especificados sem substituir o documento inteiro
         await funcionarioRef.set(data, { merge: true })
+        const funcionario = await funcionarioRef.get()
+        return funcionario.data()
     } catch (error) {
         console.error('Erro ao buscar funcionário por ID:', error);
         throw error;
@@ -79,3 +81,25 @@ export const deleteById = async (id: string) => {
         throw error;
     }
 }
+
+export const endContractById = async (id: string) => {
+    try {
+        const funcionarioRef = db.collection('funcionario').doc(id);
+        const funcionario = await funcionarioRef.get();
+
+        if (!funcionario.exists) {
+            throw new Error('Nenhum funcionário com esse ID!');
+        } else {
+            const funcionarioData = funcionario.data();
+            if (funcionarioData) {
+                await funcionarioRef.update({
+                    'funcionarioInfo.isContractEnded': true,
+                });
+                console.log('Contrato finalizado com sucesso!');
+            }
+        }
+    } catch (error) {
+        console.error('Erro ao terminar contrato:', error);
+        throw error;
+    }
+};
