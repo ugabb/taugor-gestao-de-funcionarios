@@ -39,6 +39,5 @@ body {
 }
 
 .input:focus {
-  outline: none;
-  border: 1px solid var(--primaryColor);
+  outline: 1px solid var(--primaryColor);
 }
