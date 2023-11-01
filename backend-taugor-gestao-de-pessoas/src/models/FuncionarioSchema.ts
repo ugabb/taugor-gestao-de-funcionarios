@@ -15,12 +15,12 @@ const ContatoInfoSchema = z.object({
   address: AddressSchema,
   phone: z.string(),
   profilePicture: z.string(),
-  birthday: z.date(),
+  birthday: z.string(),
 });
 
 const FuncionarioInfoSchema = z.object({
   role: z.string(),
-  admissioDate: z.date(),
+  admissioDate: z.string(),
   sector: z.string(),
   salary: z.number(),
 });
