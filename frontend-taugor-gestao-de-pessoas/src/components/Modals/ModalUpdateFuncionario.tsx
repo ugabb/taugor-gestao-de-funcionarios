@@ -16,6 +16,7 @@ type Props = {
     openModal: boolean;
     handleOpen: Function
     handleCloseModal: Function
+    action: string;
 }
 
 const style = {
@@ -53,7 +54,7 @@ const initialFuncionarioState: IFuncionario = {
     },
 };
 
-const ModalUpdateFuncionario = ({ openModal, handleOpen, handleCloseModal }: Props) => {
+const ModalUpdateFuncionario = ({ openModal, handleOpen, handleCloseModal, action }: Props) => {
     const [funcionario, setFuncionario] = useState<IFuncionario>(initialFuncionarioState)
     const { register, handleSubmit, formState: { errors } } = useForm<IFuncionario>()
 
@@ -71,7 +72,8 @@ const ModalUpdateFuncionario = ({ openModal, handleOpen, handleCloseModal }: Pro
             aria-describedby="modal-modal-description"
         >
             <Box sx={style}>
-                <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col justify-center w-full gap-5'>
+                {/* ATUALIZAR */}
+                {action == 'atualizar' && <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col justify-center w-full gap-5'>
 
                     <div className="flex flex-col md:flex-row md:gap-5 w-full">
                         <div className='flex flex-col lg:gap-5 lg:w-1/2'>
@@ -117,25 +119,6 @@ const ModalUpdateFuncionario = ({ openModal, handleOpen, handleCloseModal }: Pro
                     </div>
 
                     <div className='flex flex-col gap-3 w-full'>
-                        <div className="w-full flex flex-col">
-                            <div className="flex flex-col md:flex-row gap-3">
-                                <div className='flex flex-col w-full'>
-                                    <input {...register("funcionarioInfo.role", { required: false })} type='text' className={`input  `} placeholder='Cargo' />
-                                    {errors.funcionarioInfo?.role && <span className='text-red-500 text-xs'>Cargo é obrigatório</span>}
-                                </div>
-
-                                <div className='flex flex-col w-full'>
-                                    <input {...register("funcionarioInfo.sector", { required: false })} type='text' className='input w-full' placeholder='Setor' />
-                                    {errors.funcionarioInfo?.sector && <span className='text-red-500 text-xs'>Setor é obrigatório</span>}
-                                </div>
-
-                                <div className='flex flex-col w-full'>
-                                    <input {...register("funcionarioInfo.salary", { required: false, valueAsNumber: true })} type='number' className='input w-full' placeholder='Salário' />
-                                    {errors.funcionarioInfo?.salary && <span className='text-red-500 text-xs'>Salário é obrigatório</span>}
-                                </div>
-                            </div>
-                            <p className='text-xs text-gray-500'>ex: Coordenador</p>
-                        </div>
 
                         <div className="w-full flex flex-col gap-3">
                             <div className="flex flex-col md:flex-row gap-3 w-full">
@@ -205,7 +188,36 @@ const ModalUpdateFuncionario = ({ openModal, handleOpen, handleCloseModal }: Pro
                     </div>
 
                     <Button type='submit' variant='outlined'>Salvar</Button>
-                </form>
+                </form>}
+
+                {/* PROMOVER */}
+                {action == 'promover' && <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col justify-center w-full gap-5'>
+                    <div className='flex flex-col gap-3 w-full'>
+                        <div className='flex flex-col justify-center w-full gap-3'>
+                            <div className="w-full flex flex-col">
+                                <div className="flex flex-col md:flex-row gap-3">
+                                    <div className='flex flex-col w-full'>
+                                        <input {...register("funcionarioInfo.role", { required: true })} type='text' className={`input  `} placeholder='Cargo' />
+                                        {errors.funcionarioInfo?.role && <span className='text-red-500 text-xs'>Cargo é obrigatório</span>}
+                                    </div>
+
+                                    <div className='flex flex-col w-full'>
+                                        <input {...register("funcionarioInfo.sector", { required: true })} type='text' className='input w-full' placeholder='Setor' />
+                                        {errors.funcionarioInfo?.sector && <span className='text-red-500 text-xs'>Setor é obrigatório</span>}
+                                    </div>
+
+                                    <div className='flex flex-col w-full'>
+                                        <input {...register("funcionarioInfo.salary", { required: true, valueAsNumber: true })} type='number' className='input w-full' placeholder='Salário' />
+                                        {errors.funcionarioInfo?.salary && <span className='text-red-500 text-xs'>Salário é obrigatório</span>}
+                                    </div>
+                                </div>
+                                <p className='text-xs text-gray-500'>ex: Coordenador</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <Button type='submit' variant='outlined'>Salvar</Button>
+                </form>}
             </Box>
         </Modal>
     )

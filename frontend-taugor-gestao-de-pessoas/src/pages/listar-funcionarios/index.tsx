@@ -2,6 +2,7 @@ import { IFuncionario } from '@/IFuncionario'
 import Header from '@/components/Header/Header'
 import TableFuncionarios from '@/components/TableFuncionarios'
 import { Button } from '@mui/material'
+import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 
 const index = () => {
@@ -19,6 +20,7 @@ const index = () => {
             console.log(error)
         }
     }
+
 
     useEffect(() => {
         getFuncionarios()

@@ -16,7 +16,7 @@ import { useForm, SubmitHandler } from 'react-hook-form'
 
 import { IFuncionario } from '@/IFuncionario'
 import axios from 'axios'
-import ModalCreateFuncionario from '@/components/ModalCreateFuncionario'
+import ModalCreateFuncionario from '@/components/Modals/ModalCreateFuncionario'
 
 
 import { storage } from '@/firebase'
