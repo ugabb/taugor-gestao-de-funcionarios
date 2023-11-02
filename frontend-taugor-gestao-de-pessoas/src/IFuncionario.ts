@@ -23,9 +23,14 @@ interface FuncionarioInfo {
     salary: number;
 }
 
+interface Histories {
+    user: string
+}
+
 export interface IFuncionario {
     id?: string;
     contatoInfo: ContatoInfo;
     funcionarioInfo: FuncionarioInfo;
-    funcionarioPDF:string;
+    funcionarioPDF: string;
+    histories: Histories
 }

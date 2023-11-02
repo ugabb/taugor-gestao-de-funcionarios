@@ -27,8 +27,15 @@ const FuncionarioInfoSchema = z.object({
   isContractEnded: z.boolean().default(false).optional()
 });
 
+const HistorySchema = z.object({
+  action: z.string(),
+  timestamp: z.string(),
+  user: z.string()
+});
+
 export const FuncionarioSchema = z.object({
   contatoInfo: ContatoInfoSchema,
   funcionarioInfo: FuncionarioInfoSchema,
-  funcionarioPDF:z.string().url()
+  funcionarioPDF: z.string().url(),
+  histories: z.array(HistorySchema).optional()
 });
