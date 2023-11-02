@@ -29,6 +29,7 @@ const TableFuncionarios = ({ funcionariosData }: Props) => {
                 <TableHead className='bg-primaryColor'>
                     <TableRow className='text-white'>
                         <TableCell className="text-white"></TableCell>
+                        <TableCell className="text-white"></TableCell>
                         <TableCell className="text-white">Nome</TableCell>
                         <TableCell className="text-white">Email</TableCell>
                         <TableCell className="text-white">Cargo</TableCell>
@@ -40,6 +41,9 @@ const TableFuncionarios = ({ funcionariosData }: Props) => {
                         <TableRow key={funcionario?.id} className='hover:bg-primaryColor/10 transition-colors'>
                             <TableCell className='text-lg '>
                                 <BiPencil onClick={handleClick} className="cursor-pointer transition-all hover:text-primaryColor" />
+                            </TableCell>
+                            <TableCell className='text-xs'>
+                                {typeof funcionario?.contatoInfo?.profilePicture === 'string' ? <img className={`w-12`} src={funcionario?.contatoInfo?.profilePicture} alt='profile picture' /> : ''}
                             </TableCell>
                             <TableCell className='text-xs w-2'>{funcionario?.contatoInfo?.email}</TableCell>
                             <TableCell>{funcionario?.contatoInfo?.name} {funcionario?.contatoInfo?.lastName}</TableCell>

@@ -12,7 +12,7 @@ interface ContatoInfo {
     gender: string;
     address: AddressInfo;
     phone: string;
-    profilePicture: File | null;
+    profilePicture: File | null | string;
     birthday: Date;
 }
 

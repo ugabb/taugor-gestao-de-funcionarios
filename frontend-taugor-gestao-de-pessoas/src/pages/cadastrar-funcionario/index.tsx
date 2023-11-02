@@ -24,6 +24,7 @@ import { getDownloadURL, ref, uploadBytes } from 'firebase/storage'
 
 //uuid
 import { v4 } from 'uuid'
+import { useRouter } from 'next/router'
 
 const initialFuncionarioState: IFuncionario = {
   contatoInfo: {
@@ -86,6 +87,11 @@ const index = () => {
         },
       });
       console.log(response);
+
+      // if(response.status == 201){
+      //   const router = useRouter()
+      //   router.push('/listar-funcionarios')
+      // }
       return response;
     } catch (error) {
       console.log(error);
@@ -93,17 +99,17 @@ const index = () => {
   };
 
 
-    const uploadImage = async () => {
-      if (funcionario.contatoInfo.profilePicture) {
-        const picture = funcionario.contatoInfo.profilePicture;
-        const imageRef = ref(storage, `profile-pictures/${picture + v4()}`);
-        await uploadBytes(imageRef, picture);
-        const pictureURL = await getDownloadURL(imageRef);
-        setPictureURL(pictureURL);
-      }
-    };
+  const uploadImage = async () => {
+    if (funcionario.contatoInfo.profilePicture && typeof funcionario.contatoInfo.profilePicture !== 'string') {
+      const picture: File = funcionario.contatoInfo.profilePicture;
+      const imageRef = ref(storage, `profile-pictures/${picture + v4()}`);
+      await uploadBytes(imageRef, picture);
+      const pictureURL = await getDownloadURL(imageRef);
+      setPictureURL(pictureURL);
+    }
+  };
 
-    
+
 
 
 
