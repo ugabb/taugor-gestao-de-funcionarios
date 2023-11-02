@@ -27,4 +27,5 @@ export interface IFuncionario {
     id?: string;
     contatoInfo: ContatoInfo;
     funcionarioInfo: FuncionarioInfo;
+    funcionarioPDF:string;
 }

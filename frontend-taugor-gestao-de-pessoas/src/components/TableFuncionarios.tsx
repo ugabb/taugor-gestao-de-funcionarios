@@ -4,6 +4,8 @@ import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper
 import { withStyles } from '@mui/styles';
 import { BiPencil, BiTrash } from 'react-icons/bi';
 import MenuDrop from './Menu';
+import { BsFilePdf } from 'react-icons/bs';
+import Link from 'next/link';
 
 
 type Props = {
@@ -23,7 +25,7 @@ const TableFuncionarios = ({ funcionariosData }: Props) => {
     };
 
     return (
-        <TableContainer className='max-w-xl' component={Paper}>
+        <TableContainer className='max-w-3xl' component={Paper}>
             {open && <MenuDrop anchorEl={anchorEl} open={open} handleClose={handleClose} handleClick={handleClick} />}
             <Table aria-label="simple table">
                 <TableHead className='bg-primaryColor'>
@@ -33,6 +35,7 @@ const TableFuncionarios = ({ funcionariosData }: Props) => {
                         <TableCell className="text-white">Nome</TableCell>
                         <TableCell className="text-white">Email</TableCell>
                         <TableCell className="text-white">Cargo</TableCell>
+                        <TableCell className="text-white">PDF</TableCell>
                         {/* <TableCell className='hidden md:block text-white'>Email</TableCell> */}
                     </TableRow>
                 </TableHead>
@@ -43,11 +46,19 @@ const TableFuncionarios = ({ funcionariosData }: Props) => {
                                 <BiPencil onClick={handleClick} className="cursor-pointer transition-all hover:text-primaryColor" />
                             </TableCell>
                             <TableCell className='text-xs'>
-                                {typeof funcionario?.contatoInfo?.profilePicture === 'string' ? <img className={`w-12`} src={funcionario?.contatoInfo?.profilePicture} alt='profile picture' /> : ''}
+                                {typeof funcionario?.contatoInfo?.profilePicture === 'string' ? <img className={`w-12 h-12 object-cover rounded-full`} src={funcionario?.contatoInfo?.profilePicture} alt='profile picture' /> : ''}
                             </TableCell>
                             <TableCell className='text-xs w-2'>{funcionario?.contatoInfo?.email}</TableCell>
                             <TableCell>{funcionario?.contatoInfo?.name} {funcionario?.contatoInfo?.lastName}</TableCell>
                             <TableCell>{funcionario?.funcionarioInfo?.role}</TableCell>
+                            <TableCell className='text-lg'>
+                                {funcionario?.funcionarioPDF &&
+                                    <Link href={funcionario?.funcionarioPDF} target='_blank'>
+                                        <BsFilePdf className={`hover:text-primaryColor cursor-pointer`} />
+                                    </Link>
+                                }
+
+                            </TableCell>
                         </TableRow>
                     ))}
                 </TableBody>

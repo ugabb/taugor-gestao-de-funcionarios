@@ -53,6 +53,7 @@ const initialFuncionarioState: IFuncionario = {
     sector: '',
     salary: 0,
   },
+  funcionarioPDF:''
 };
 
 
@@ -91,6 +92,7 @@ const index = () => {
           sector: funcionarioData.funcionarioInfo.sector,
           salary: Number(funcionarioData.funcionarioInfo.salary),
         },
+        funcionarioPDF: funcionarioPdfUrl
       });
       console.log(response);
 
@@ -250,7 +252,7 @@ const index = () => {
               <div className='flex flex-col lg:gap-5 lg:w-1/2'>
                 <div className='w-full flex flex-col'>
                   <div className='flex flex-col w-full'>
-                    <input {...register("contatoInfo.name", { required: false })} type='text' className='input' placeholder='Nome' onChange={syncronizeWithDocument} />
+                    <input {...register("contatoInfo.name", { required: true })} type='text' className='input' placeholder='Nome' onChange={syncronizeWithDocument} />
                     {errors.contatoInfo?.name && <span className='text-red-500 text-xs'>Nome é obrigatório</span>}
                   </div>
                   <p className='text-xs text-gray-500'>ex: Tiago</p>
@@ -317,17 +319,17 @@ const index = () => {
               <div className="w-full flex flex-col">
                 <div className="flex flex-col md:flex-row gap-3">
                   <div className='flex flex-col w-full'>
-                    <input {...register("funcionarioInfo.role", { required: false })} type='text' className={`input  `} placeholder='Cargo' onChange={syncronizeWithDocument} />
+                    <input {...register("funcionarioInfo.role", { required: true })} type='text' className={`input  `} placeholder='Cargo' onChange={syncronizeWithDocument} />
                     {errors.funcionarioInfo?.role && <span className='text-red-500 text-xs'>Cargo é obrigatório</span>}
                   </div>
 
                   <div className='flex flex-col w-full'>
-                    <input {...register("funcionarioInfo.sector", { required: false })} type='text' className='input w-full' placeholder='Setor' onChange={syncronizeWithDocument} />
+                    <input {...register("funcionarioInfo.sector", { required: true })} type='text' className='input w-full' placeholder='Setor' onChange={syncronizeWithDocument} />
                     {errors.funcionarioInfo?.sector && <span className='text-red-500 text-xs'>Setor é obrigatório</span>}
                   </div>
 
                   <div className='flex flex-col w-full'>
-                    <input {...register("funcionarioInfo.salary", { required: false, valueAsNumber: true })} type='number' className='input w-full' placeholder='Salário' onChange={syncronizeWithDocument} />
+                    <input {...register("funcionarioInfo.salary", { required: true, valueAsNumber: true })} type='number' className='input w-full' placeholder='Salário' onChange={syncronizeWithDocument} />
                     {errors.funcionarioInfo?.salary && <span className='text-red-500 text-xs'>Salário é obrigatório</span>}
                   </div>
                 </div>
@@ -337,23 +339,23 @@ const index = () => {
               <div className="w-full flex flex-col gap-3">
                 <div className="flex flex-col md:flex-row gap-3 w-full">
                   <div className='flex flex-col w-full'>
-                    <input {...register("contatoInfo.address.cep", { required: false })} type='text' className='input w-full' placeholder='CEP' onChange={syncronizeWithDocument} />
+                    <input {...register("contatoInfo.address.cep", { required: true })} type='text' className='input w-full' placeholder='CEP' onChange={syncronizeWithDocument} />
                     {errors.contatoInfo?.address?.cep && <span className='text-red-500 text-xs'>CEP é obrigatório</span>}
                   </div>
                   <div className="flex gap-3">
                     <div className='flex flex-col w-full'>
-                      <input {...register("contatoInfo.address.number", { required: false, valueAsNumber: true })} type='number' className='input w-full' placeholder='Número' onChange={syncronizeWithDocument} />
+                      <input {...register("contatoInfo.address.number", { required: true, valueAsNumber: true })} type='number' className='input w-full' placeholder='Número' onChange={syncronizeWithDocument} />
                       {errors.contatoInfo?.address?.number && <span className='text-red-500 text-xs'>Número é obrigatório</span>}
                     </div>
 
                     <div className='flex flex-col w-full'>
-                      <input {...register("contatoInfo.address.uf", { required: false })} type='text' className='input w-full' placeholder='UF' onChange={syncronizeWithDocument} />
+                      <input {...register("contatoInfo.address.uf", { required: true })} type='text' className='input w-full' placeholder='UF' onChange={syncronizeWithDocument} />
                       {errors.contatoInfo?.address?.uf && <span className='text-red-500 text-xs'>UF é obrigatório</span>}
                     </div>
                   </div>
                 </div>
                 <div className='flex flex-col w-full'>
-                  <input {...register("contatoInfo.address.logradouro", { required: false })} type='text' className='input' placeholder='Logradouro' onChange={syncronizeWithDocument} />
+                  <input {...register("contatoInfo.address.logradouro", { required: true })} type='text' className='input' placeholder='Logradouro' onChange={syncronizeWithDocument} />
                   {errors.contatoInfo?.address?.logradouro && <span className='text-red-500 text-xs'>Logadouro é obrigatório</span>}
                 </div>
                 <p className='text-xs text-gray-500'>ex: Rua 5 de Gotham City</p>
@@ -365,16 +367,16 @@ const index = () => {
                   <div className='w-full flex flex-col'>
                     <div className="flex gap-3">
                       <div className='flex flex-col w-full'>
-                        <input {...register("contatoInfo.phone", { required: false })} type='text' className='input w-full' placeholder='Telefone' onChange={syncronizeWithDocument} />
+                        <input {...register("contatoInfo.phone", { required: true })} type='text' className='input w-full' placeholder='Telefone' onChange={syncronizeWithDocument} />
                         {errors.contatoInfo?.phone && <span className='text-red-500 text-xs'>Telefone é obrigatório</span>}
                       </div>
                       <div className='flex flex-col w-full'>
-                        <input {...register("contatoInfo.email", { required: false })} type='email' className='input w-full' placeholder='Email' onChange={syncronizeWithDocument} />
+                        <input {...register("contatoInfo.email", { required: true })} type='email' className='input w-full' placeholder='Email' onChange={syncronizeWithDocument} />
                         {errors.contatoInfo?.email && <span className='text-red-500 text-xs'>Email é obrigatório</span>}
                       </div>
 
                       <div className='flex flex-col w-full'>
-                        <select {...register("contatoInfo.gender", { required: false })} type='text' className='input w-full' placeholder='Gênero' onChange={syncronizeWithDocument} >
+                        <select {...register("contatoInfo.gender", { required: true })} type='text' className='input w-full' placeholder='Gênero' onChange={syncronizeWithDocument} >
                           <option value="">-- Selecione</option>
                           <option value="masculino">Masculino</option>
                           <option value="feminino">Feminino</option>
@@ -387,11 +389,11 @@ const index = () => {
                   <div className='w-full flex flex-col'>
                     <div className="flex gap-3">
                       <div className='flex flex-col w-full'>
-                        <input {...register("funcionarioInfo.admissioDate", { required: false })} type='date' className='input w-full' placeholder='Data de Admissão' onChange={syncronizeWithDocument} />
+                        <input {...register("funcionarioInfo.admissioDate", { required: true })} type='date' className='input w-full' placeholder='Data de Admissão' onChange={syncronizeWithDocument} />
                         {errors.funcionarioInfo?.admissioDate && <span className='text-red-500 text-xs'>Data de Admissão é obrigatório</span>}
                       </div>
                       <div className='flex flex-col w-full'>
-                        <input {...register("contatoInfo.birthday", { required: false })} type='date' className='input w-full' placeholder='Data de Nascimento' onChange={syncronizeWithDocument} />
+                        <input {...register("contatoInfo.birthday", { required: true })} type='date' className='input w-full' placeholder='Data de Nascimento' onChange={syncronizeWithDocument} />
                         {errors.contatoInfo?.birthday && <span className='text-red-500 text-xs'>Data de Nascimento é obrigatório</span>}
                       </div>
                     </div>
@@ -412,7 +414,7 @@ const index = () => {
 
 
       </main>
-      {open && <ModalCreateFuncionario funcionario={funcionario} createFuncionario={createFuncionario} handleClose={handleClose} handleOpen={handleOpen} open={open} />}
+      {(open && pictureURL != '' && funcionarioPdfUrl != '') && <ModalCreateFuncionario funcionario={funcionario} createFuncionario={createFuncionario} handleClose={handleClose} handleOpen={handleOpen} open={open} />}
     </div>
   )
 }
