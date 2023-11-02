@@ -25,6 +25,7 @@ import { getDownloadURL, ref, uploadBytes } from 'firebase/storage'
 //uuid
 import { v4 } from 'uuid'
 import { useRouter } from 'next/router'
+import FuncionarioA4 from '@/components/FuncionarioA4'
 
 const initialFuncionarioState: IFuncionario = {
   contatoInfo: {
@@ -88,28 +89,18 @@ const index = () => {
       });
       console.log(response);
 
-      // if(response.status == 201){
-      //   const router = useRouter()
-      //   router.push('/listar-funcionarios')
+      // if (response.status == 201) {
+      //   return (
+      //     <div className='absolute inset-0 flex items-center justify-center bg-white p-10'>
+      //       <h1 className='text-blue-600 text-xl font-bold'>Funcionário Criado com sucesso!</h1>
+      //     </div>
+      //   )
       // }
       return response;
     } catch (error) {
       console.log(error);
     }
   };
-
-
-  const uploadImage = async () => {
-    if (funcionario.contatoInfo.profilePicture && typeof funcionario.contatoInfo.profilePicture !== 'string') {
-      const picture: File = funcionario.contatoInfo.profilePicture;
-      const imageRef = ref(storage, `profile-pictures/${picture + v4()}`);
-      await uploadBytes(imageRef, picture);
-      const pictureURL = await getDownloadURL(imageRef);
-      setPictureURL(pictureURL);
-    }
-  };
-
-
 
 
 
@@ -154,7 +145,7 @@ const index = () => {
         },
       }));
     }
-    console.log(Number(funcionario.contatoInfo.address.number), Number(funcionario.funcionarioInfo.salary))
+    console.log(funcionario.contatoInfo.profilePicture)
   };
 
 
@@ -166,7 +157,7 @@ const index = () => {
   // selecionar imagem
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [isRounded, setIsRounded] = useState<boolean>(false);
-  function handleUploadImage(e: ChangeEvent<HTMLInputElement>) {
+  function handleSelectedPicture(e: ChangeEvent<HTMLInputElement>) {
     if (e.target.files && e.target.files.length > 0) {
       const picture = e.target.files[0];
       setFuncionario((prev) => ({
@@ -184,6 +175,16 @@ const index = () => {
       }
     }
   }
+  const uploadImage = async () => {
+    if (funcionario.contatoInfo.profilePicture && typeof funcionario.contatoInfo.profilePicture !== 'string') {
+      const picture: File = funcionario.contatoInfo.profilePicture;
+      const imageRef = ref(storage, `profile-pictures/${picture + v4()}`);
+      await uploadBytes(imageRef, picture);
+      const pictureURL = await getDownloadURL(imageRef);
+      setPictureURL(pictureURL);
+    }
+  };
+
 
   const handleRounded = () => {
     setIsRounded(prev => !prev)
@@ -259,7 +260,7 @@ const index = () => {
                           <input
                             type='file'
                             id='upload-photo'
-                            onChangeCapture={(e) => handleUploadImage(e)}
+                            onChangeCapture={(e) => handleSelectedPicture(e)}
                             style={{ display: 'none' }}
                             {...register("contatoInfo.profilePicture")}
                           />
@@ -366,31 +367,7 @@ const index = () => {
         </section>
 
 
-        <section className=' bg-gray-100 flex justify-center items-center lg:w-1/2 h-screen' id='document'>
-          <div className='bg-white a4 shadow-lg rounded-sm p-10 flex flex-col gap-3'>
-            <div className={`without-border-top px-3 `} >
-              <h1 className='text-primaryColor text-xl'>{funcionario?.contatoInfo?.name} {funcionario?.contatoInfo?.lastName}</h1>
-              <p className='text-xs text-gray-500'>Cargo: {funcionario?.funcionarioInfo?.role}</p>
-              <p className='text-xs text-gray-500'>Setor: {funcionario?.funcionarioInfo?.sector}</p>
-              <p className='text-xs text-gray-500'>Salário: {funcionario?.funcionarioInfo?.salary}</p>
-              <p className='text-xs text-gray-500'>CEP: {funcionario?.contatoInfo?.address?.cep}</p>
-              <p className='text-xs text-gray-500'>Número: {funcionario?.contatoInfo?.address?.number}</p>
-              <p className='text-xs text-gray-500'>UF: {funcionario?.contatoInfo?.address?.uf}</p>
-              <p className='text-xs text-gray-500'>Telefone: {funcionario?.contatoInfo?.phone}</p>
-              {/* <p className='text-xs text-gray-500'>email: {funcionario.contatoInfo.}</p> */}
-              {/* <p className='text-xs text-gray-500'>birthday: {funcionario.contatoInfo.birthday}</p> */}
-              {/* <p className='text-xs text-gray-500'>data admissao: {funcionario.funcionarioInfo.admissioDate}</p> */}
-            </div>
-            <div className='border border-primaryColor px-3 '>
-              <h1 className='text-primaryColor text-xl'>Gabriel Barros</h1>
-              <p className='text-xs text-gray-500'>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Id nobis enim ratione quisquam neque temporibus, quia impedit dignissimos quos facilis eligendi error quo ipsum amet illum repellat ad, possimus explicabo!</p>
-            </div>
-            <div className='border border-primaryColor px-3 '>
-              <h1 className='text-primaryColor text-xl'>Gabriel Barros</h1>
-              <p className='text-xs text-gray-500'>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Id nobis enim ratione quisquam neque temporibus, quia impedit dignissimos quos facilis eligendi error quo ipsum amet illum repellat ad, possimus explicabo!</p>
-            </div>
-          </div>
-        </section>
+        <FuncionarioA4 funcionario={funcionario} profilePicture={selectedImage} isRounded={isRounded} />
 
       </main>
       {open && <ModalCreateFuncionario funcionario={funcionario} createFuncionario={createFuncionario} handleClose={handleClose} handleOpen={handleOpen} open={open} />}
