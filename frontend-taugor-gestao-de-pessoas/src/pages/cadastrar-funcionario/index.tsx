@@ -53,7 +53,10 @@ const initialFuncionarioState: IFuncionario = {
     sector: '',
     salary: 0,
   },
-  funcionarioPDF:''
+  funcionarioPDF: '',
+  histories: {
+    user: ''
+  }
 };
 
 

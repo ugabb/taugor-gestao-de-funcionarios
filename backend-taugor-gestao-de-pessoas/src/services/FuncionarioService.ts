@@ -3,17 +3,19 @@ import { db } from '../config/FirestoreConfig'
 export const create = async (data: any) => {
     try {
         const funcionarioRef = db.collection("funcionario")
-        const { name, phone } = data.contatoInfo
+        const { name, phone, email } = data.contatoInfo
 
         const verificaFuncionario = await funcionarioRef
             .where('contatoInfo.name', '==', name)
             .where('contatoInfo.phone', '==', phone)
+            .where('contatoInfo.email', '==', email)
             .get()
 
         if (!verificaFuncionario.empty) {
-            throw new Error("Já existe um funcionário com esse nome ou telefone.")
+            throw new Error("Já existe um funcionário com esse nome, telefone e/ou email.")
         }
         const response = await db.collection('funcionario').add(data);
+        // await saveHistory('criado', data.histories.user, data);
         return response;
     } catch (error) {
         console.error('Erro ao criar funcionário:', error);
@@ -122,6 +124,20 @@ export const fireById = async (id: string) => {
         }
     } catch (error) {
         console.error('Erro ao demitir contrato:', error);
+        throw error;
+    }
+};
+
+export const saveHistory = async (action: string, user: string, data: any) => {
+    try {
+        const funcionarioRef = db.collection('funcionario').doc();
+        const timestamp = new Date().toISOString();
+        const historyData = { action, timestamp, user };
+        await funcionarioRef.update({
+            histories: data.histories ? [...data.histories, historyData] : [historyData],
+        });
+    } catch (error) {
+        console.error('Erro ao salvar o histórico:', error);
         throw error;
     }
 };
