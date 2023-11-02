@@ -14,7 +14,7 @@ const ContatoInfoSchema = z.object({
   gender: z.string(),
   address: AddressSchema,
   phone: z.string(),
-  profilePicture: z.string(),
+  profilePicture: z.string().url(),
   birthday: z.string(),
 });
 
@@ -30,4 +30,5 @@ const FuncionarioInfoSchema = z.object({
 export const FuncionarioSchema = z.object({
   contatoInfo: ContatoInfoSchema,
   funcionarioInfo: FuncionarioInfoSchema,
+  funcionarioPDF:z.string().url()
 });
