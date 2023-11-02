@@ -1,5 +1,5 @@
 import FormHeader from '@/components/Header/FormHeader'
-import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react'
+import React, { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react'
 
 //react icons
 import { RiPencilFill } from 'react-icons/ri'
@@ -26,6 +26,10 @@ import { getDownloadURL, ref, uploadBytes } from 'firebase/storage'
 import { v4 } from 'uuid'
 import { useRouter } from 'next/router'
 import FuncionarioA4 from '@/components/FuncionarioA4'
+
+// gerar PDF
+import html2canvas from 'html2canvas'
+import jsPDF from 'jspdf'
 
 const initialFuncionarioState: IFuncionario = {
   contatoInfo: {
@@ -58,12 +62,13 @@ const index = () => {
 
   // criar funcionario
   const [funcionario, setFuncionario] = useState<IFuncionario>(initialFuncionarioState)
-  console.log("Funcionario CRU", funcionario)
-  const [pictureURL, setPictureURL] = useState<string>("");
+
+
   const createFuncionario = async (funcionarioData: IFuncionario) => {
     try {
       console.log("Funcionario POST: ", funcionarioData)
-      console.log(pictureURL)
+      console.log("Funcionario PDF: ", funcionarioPdfUrl)
+      console.log("Funcionario Picture: ", pictureURL)
       const response = await axios.post<IFuncionario>('http://localhost:8080/api/funcionario', {
         contatoInfo: {
           name: funcionarioData.contatoInfo.name,
@@ -108,6 +113,7 @@ const index = () => {
     console.log("Funcionario DATA: ", funcionarioData)
     setFuncionario(funcionarioData)
     uploadImage();
+    generateAndUploadPdf()
     handleOpen()
   }
 
@@ -157,6 +163,7 @@ const index = () => {
   // selecionar imagem
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [isRounded, setIsRounded] = useState<boolean>(false);
+  const [pictureURL, setPictureURL] = useState<string>("");
   function handleSelectedPicture(e: ChangeEvent<HTMLInputElement>) {
     if (e.target.files && e.target.files.length > 0) {
       const picture = e.target.files[0];
@@ -189,6 +196,38 @@ const index = () => {
   const handleRounded = () => {
     setIsRounded(prev => !prev)
   }
+
+  // gerar PDF
+  // const [pdfData, setPdfData] = useState<Blob | null>(null);
+  const [funcionarioPdfUrl, setFuncionarioPDFUrl] = useState<string>('');
+  const generateAndUploadPdf = async () => {
+    if (!funcionario) {
+      return;
+    }
+
+    const input = document.getElementById('document');
+    if (input) {
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      const inputWidthPx = input.offsetWidth;
+      const inputHeightPx = input.offsetHeight;
+
+      const pdfWidthMm = 210;
+      const pdfHeightMm = pdfWidthMm * (inputHeightPx / inputWidthPx);
+
+      const canvas = await html2canvas(input, { scale: 2, useCORS: true, scrollX: 0, scrollY: 0, width: inputWidthPx, height: inputHeightPx });
+
+      const imgData = canvas.toDataURL('image/jpeg', 1.0);
+      pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidthMm, pdfHeightMm);
+      const pdfData = pdf.output('blob');
+      if (pdfData) {
+        const pdfRef = ref(storage, `funcionarios-pdf/${funcionario.contatoInfo.name}${funcionario.contatoInfo.lastName}.pdf` + v4());
+        await uploadBytes(pdfRef, pdfData);
+        const pdfURL = await getDownloadURL(pdfRef);
+        setFuncionarioPDFUrl(pdfURL);
+        console.log('PDF URL:', pdfURL);
+      }
+    }
+  };
 
 
   return (
@@ -367,7 +406,10 @@ const index = () => {
         </section>
 
 
+
         <FuncionarioA4 funcionario={funcionario} profilePicture={selectedImage} isRounded={isRounded} />
+
+
 
       </main>
       {open && <ModalCreateFuncionario funcionario={funcionario} createFuncionario={createFuncionario} handleClose={handleClose} handleOpen={handleOpen} open={open} />}
