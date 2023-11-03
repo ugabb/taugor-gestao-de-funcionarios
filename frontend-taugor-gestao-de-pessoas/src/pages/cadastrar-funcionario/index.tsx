@@ -407,9 +407,8 @@ const CadastrarFuncionario = () => {
           </form>
         </section>
 
-
-        {typeof selectedImage == 'string' && <FuncionarioA4 funcionario={funcionario} profilePicture={selectedImage} isRounded={isRounded} />}
-
+        {/* @ts-ignore */}
+        <FuncionarioA4 funcionario={funcionario} profilePicture={selectedImage} isRounded={isRounded} />
       </main>
       {(open && pictureURL != '' && funcionarioPdfUrl != '') && <ModalCreateFuncionario funcionario={funcionario} createFuncionario={createFuncionario} handleClose={handleClose} handleOpen={handleOpen} open={open} />}
     </div>
