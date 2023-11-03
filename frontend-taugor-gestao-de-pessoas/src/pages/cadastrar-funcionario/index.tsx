@@ -31,6 +31,9 @@ import FuncionarioA4 from '@/components/FuncionarioA4'
 import html2canvas from 'html2canvas'
 import jsPDF from 'jspdf'
 
+
+import { getStates } from '@brazilian-utils/brazilian-utils';
+
 const initialFuncionarioState: IFuncionario = {
   contatoInfo: {
     name: '',
@@ -59,10 +62,10 @@ const initialFuncionarioState: IFuncionario = {
   }
 };
 
-
 const index = () => {
   const { register, handleSubmit, formState: { errors } } = useForm<IFuncionario>()
 
+  const ufs = getStates()
 
   // criar funcionario
   const [funcionario, setFuncionario] = useState<IFuncionario>(initialFuncionarioState)
@@ -73,7 +76,7 @@ const index = () => {
       console.log("Funcionario POST: ", funcionarioData)
       console.log("Funcionario PDF: ", funcionarioPdfUrl)
       console.log("Funcionario Picture: ", pictureURL)
-      const response = await axios.post<IFuncionario>('http://localhost:8080/api/funcionario', {
+      const response = await axios.post<IFuncionario>(process.env.NEXT_PUBLIC_API_KEY, {
         contatoInfo: {
           name: funcionarioData.contatoInfo.name,
           lastName: funcionarioData.contatoInfo.lastName,
@@ -343,7 +346,7 @@ const index = () => {
                 <div className="flex flex-col md:flex-row gap-3 w-full">
                   <div className='flex flex-col w-full'>
                     <input {...register("contatoInfo.address.cep", { required: true })} type='text' className='input w-full' placeholder='CEP' onChange={syncronizeWithDocument} />
-                    {errors.contatoInfo?.address?.cep && <span className='text-red-500 text-xs'>CEP é obrigatório</span>}
+                    {(errors.contatoInfo?.address?.cep) && <span className='text-red-500 text-xs'>CEP é obrigatório</span>}
                   </div>
                   <div className="flex gap-3">
                     <div className='flex flex-col w-full'>
@@ -351,10 +354,12 @@ const index = () => {
                       {errors.contatoInfo?.address?.number && <span className='text-red-500 text-xs'>Número é obrigatório</span>}
                     </div>
 
-                    <div className='flex flex-col w-full'>
-                      <input {...register("contatoInfo.address.uf", { required: true })} type='text' className='input w-full' placeholder='UF' onChange={syncronizeWithDocument} />
-                      {errors.contatoInfo?.address?.uf && <span className='text-red-500 text-xs'>UF é obrigatório</span>}
-                    </div>
+                    <select {...register("contatoInfo.address.uf", { required: true })} type='text' className='input w-full' placeholder='Gênero' onChange={syncronizeWithDocument} >
+                      <option value="">-- Selecione</option>
+                      {ufs.map((uf) => (
+                        <option value={uf.code}>{uf.code}</option>
+                      ))}
+                    </select>
                   </div>
                 </div>
                 <div className='flex flex-col w-full'>
