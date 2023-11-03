@@ -5,13 +5,14 @@ import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import { IFuncionario } from '@/IFuncionario';
 import { useState } from 'react';
+import { useRouter } from 'next/router';
 
 type Prop = {
     handleOpen: Function
     handleClose: Function
     open: boolean
     createFuncionario: Function
-    funcionario: IFuncionario
+    funcionario: IFuncionario;
 }
 
 
@@ -28,10 +29,12 @@ const style = {
 
 
 const ModalCreateFuncionario = ({ funcionario, open, handleClose, createFuncionario }: Prop) => {
-
+    const router = useRouter();
     const closeModal = () => {
         createFuncionario(funcionario)
         handleClose()
+        alert("Funcionário criado com sucesso")
+        router.push('/listar-funcionarios');
     }
     return (
         <Modal
