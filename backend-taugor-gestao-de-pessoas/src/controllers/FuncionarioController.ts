@@ -40,12 +40,12 @@ export const getFuncionarioById = async (req: Request, res: Response) => {
 // PATCH -> /api/funcionario/:id
 export const updateFuncionarioById = async (req: Request, res: Response) => {
     try {
-        const validatedFuncionario = FuncionarioSchema.parse(req.body)
+        // const validatedFuncionario = FuncionarioSchema.parse(req.body)
         const { id } = req.params
-        res.status(200).json({ message: 'Funcionário atualizado com sucesso', funcionariosUpdated: await update(id, validatedFuncionario) })
+        res.status(200).json({ message: 'Funcionário atualizado com sucesso', funcionariosUpdated: await update(id, req.body) })
     } catch (error) {
         console.log(`Error while updating Funcionario `, error);
-        return res.status(500).send('Erro ao atualizar funcionário');
+        return res.status(500).send({ message: 'Erro ao atualizar Funcionário', error: error.message });
     }
 }
 
