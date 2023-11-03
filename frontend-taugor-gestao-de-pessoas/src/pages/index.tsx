@@ -3,7 +3,7 @@ import { useContext, useEffect, useState } from 'react'
 import Link from 'next/link';
 
 // Material UI
-import { Button, TextField } from '@mui/material'
+import { Box, Button, CircularProgress, TextField } from '@mui/material'
 import Header from '@/components/Header/Header';
 import { User, onAuthStateChanged } from 'firebase/auth';
 import { auth } from '@/firebase';
@@ -26,6 +26,7 @@ export default function Home() {
         setIsLoading(false)
       } else {
         setAuthUser(null);
+        setIsLoading(false)
       }
     })
     return () => {
@@ -33,12 +34,11 @@ export default function Home() {
     }
   }, [])
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
   return (
     <div className='flex flex-col justify-center'>
+      {isLoading && <Box className="flex justify-center items-center">
+        <CircularProgress />
+      </Box>}
       <Header />
 
       <main className='flex flex-col gap-3 justify-center items-center my-10'>

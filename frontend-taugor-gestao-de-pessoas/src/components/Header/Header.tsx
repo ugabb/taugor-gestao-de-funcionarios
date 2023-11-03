@@ -1,5 +1,5 @@
 
-import { Button } from '@mui/material'
+import { Box, Button, CircularProgress } from '@mui/material'
 import Image from 'next/image'
 import Link from 'next/link'
 import React, { useContext, useEffect, useState } from 'react'
@@ -8,17 +8,18 @@ import { User, onAuthStateChanged } from 'firebase/auth';
 import { auth } from '@/firebase';
 
 import { IoMdHome } from 'react-icons/io'
+import { useRouter } from 'next/router';
 
 const Header = () => {
     const [authUser, setAuthUser] = useState<User | null>(null); // Inicializando com tipo 'User | null'
-    const [isLoading, setIsLoading] = useState(true);
+
+    const router = useRouter()
 
 
     useEffect(() => {
         const listen = onAuthStateChanged(auth, (user) => {
             if (user) {
                 setAuthUser(user)
-                setIsLoading(false)
             } else {
                 setAuthUser(null);
             }
@@ -28,13 +29,10 @@ const Header = () => {
         }
     }, [])
 
-    if (isLoading) {
-        return <div>Loading...</div>;
-    }
-
     const handleSignOut = async () => {
         try {
             await auth.signOut();
+            router.push('/')
             // Sign-out successful.
         } catch (error) {
             // An error happened.
@@ -60,7 +58,7 @@ const Header = () => {
                             <Link href={"/listar-funcionarios"}>Listar Funcinário</Link>
                         </Button>
                         <Button className='hover:scale-105 transition-all' onClick={handleSignOut}>
-                            <Link href={"/"} >Sign Out</Link>
+                            Sign Out
                         </Button>
                     </>
                 }

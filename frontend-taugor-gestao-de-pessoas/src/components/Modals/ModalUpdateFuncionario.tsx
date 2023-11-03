@@ -66,7 +66,7 @@ const ModalUpdateFuncionario = ({ openModal, handleOpen, handleCloseModal, actio
 
     const handleGetFuncionarioById = async () => {
         try {
-            const response = await axios.get(`http://localhost:8080/api/funcionario/${funcionarioID}`)
+            const response = await axios.get(`${process.env.NEXT_PUBLIC_API_KEY}/${funcionarioID}`)
             const data = response.data
             setFuncionario(data.funcionarios)
             // console.log(data.funcionarios.contatoInfo.profilePicture)

@@ -34,6 +34,7 @@ const ModalConfirmUpdate = ({ funcionario, open, handleClose, updateFuncionario,
     const closeModal = () => {
         updateFuncionario(funcionario, funcionarioID)
         handleClose()
+        alert("Salvo com sucesso!")
         router.reload();
     }
     return (

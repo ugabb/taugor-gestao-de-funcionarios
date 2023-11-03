@@ -11,7 +11,6 @@ const FormHeader = () => {
                 <Image src={'/marca-taugor.png'} alt='logo Taugor' width={180} height={109} className='lg:border-r' />
 
                 <div className='ml-10'>
-                    <p className='text-gray-400 text-xs'>PASSO 2 DE 6</p>
                     <h3 className='text-lg font-semibold'>Informação de contato</h3>
                 </div>
             </div>

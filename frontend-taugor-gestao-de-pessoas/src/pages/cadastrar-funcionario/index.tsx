@@ -10,7 +10,7 @@ import { AiOutlineArrowUp } from 'react-icons/ai'
 
 
 //material ui
-import { Button } from '@mui/material'
+import { Box, Button, CircularProgress } from '@mui/material'
 
 import { useForm, SubmitHandler } from 'react-hook-form'
 
@@ -24,7 +24,7 @@ import { getDownloadURL, ref, uploadBytes } from 'firebase/storage'
 
 //uuid
 import { v4 } from 'uuid'
-import { useRouter } from 'next/router'
+
 import FuncionarioA4 from '@/components/FuncionarioA4'
 
 // gerar PDF
@@ -69,8 +69,6 @@ const index = () => {
 
   // criar funcionario
   const [funcionario, setFuncionario] = useState<IFuncionario>(initialFuncionarioState)
-
-
   const createFuncionario = async (funcionarioData: IFuncionario) => {
     try {
       console.log("Funcionario POST: ", funcionarioData)
