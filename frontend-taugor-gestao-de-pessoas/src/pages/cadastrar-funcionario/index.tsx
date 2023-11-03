@@ -263,7 +263,7 @@ const CadastrarFuncionario = () => {
                 <div className={`${selectedImage ? '' : 'px-5 py-10 bg-gray-50'} h-full flex justify-center items-center  rounded-md`}>
                   {selectedImage ? (
                     <div className='flex flex-col gap-3'>
-                      <Image src={selectedImage} alt="Selected" className={`h-40 w-40 object-cover ${isRounded ? 'rounded-full' : ''}`} />
+                      <Image width={1000} height={1000}  src={selectedImage} alt="Selected" className={`h-40 w-40 object-cover ${isRounded ? 'rounded-full' : ''}`} />
                       <div className='flex items-center gap-3'>
                         {isRounded ? <BsToggle2Off onClick={handleRounded} className="text-3xl text-primaryColor cursor-pointer rotate-180" /> : <BsToggle2Off onClick={handleRounded} className="text-3xl text-gray-400 cursor-pointer" />}
                         <p className="text-sm">Foto Redonda</p>

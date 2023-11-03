@@ -47,7 +47,7 @@ const TableFuncionarios = () => {
                                 <BiPencil onClick={(e: any) => handleClick(e, funcionario?.id)} className="cursor-pointer transition-all hover:text-primaryColor" />
                             </TableCell>
                             <TableCell>
-                                {typeof funcionario?.contatoInfo?.profilePicture === 'string' ? <Image className={`w-12 h-12 object-cover rounded-full`} src={funcionario?.contatoInfo?.profilePicture} alt='profile picture' /> : ''}
+                                {typeof funcionario?.contatoInfo?.profilePicture === 'string' ? <Image width={1000} height={1000}  className={`w-12 h-12 object-cover rounded-full`} src={funcionario?.contatoInfo?.profilePicture} alt='profile picture' /> : ''}
                             </TableCell>
                             <TableCell>{funcionario?.contatoInfo?.name} {funcionario?.contatoInfo?.lastName}</TableCell>
                             <TableCell className='text-xs w-2'>{funcionario?.contatoInfo?.email}</TableCell>

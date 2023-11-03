@@ -164,7 +164,7 @@ const ModalUpdateFuncionario = ({ openModal, handleOpen, handleCloseModal, actio
                             <div className={`h-full flex justify-center items-center  rounded-md`}>
                                 {funcionario?.contatoInfo?.profilePicture ? (
                                     <div className='flex flex-col gap-3'>
-                                        <Image src={funcionario?.contatoInfo?.profilePicture} alt="Selected" className={`h-40 w-40 object-cover ${isRounded ? 'rounded-full' : ''}`} />
+                                        {typeof funcionario?.contatoInfo?.profilePicture == 'string' && <Image width={1000} height={1000} src={funcionario?.contatoInfo?.profilePicture} alt="Selected" className={`h-40 w-40 object-cover ${isRounded ? 'rounded-full' : ''}`} />}
                                         <div className='flex items-center gap-3'>
                                             {isRounded ? <BsToggle2Off onClick={handleRounded} className="text-3xl text-primaryColor cursor-pointer rotate-180" /> : <BsToggle2Off onClick={handleRounded} className="text-3xl text-gray-400 cursor-pointer" />}
                                             <p className="text-sm">Foto Redonda</p>

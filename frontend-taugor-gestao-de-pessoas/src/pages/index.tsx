@@ -62,7 +62,7 @@ export default function Home() {
               </div>
             </div>
             <div className='flex flex-col text-center gap-3'>
-              <Image className='w-[400px] h-[400px] object-cover rounded-full' src="https://images.unsplash.com/photo-1560250056-07ba64664864?auto=format&fit=crop&q=80&w=1451&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="" />
+              <Image width={1000} height={1000} className='w-[400px] h-[400px] object-cover rounded-full' src="/home.png" alt="" />
             </div>
           </div>
         ) : (

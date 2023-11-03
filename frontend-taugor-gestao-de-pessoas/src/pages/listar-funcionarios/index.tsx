@@ -10,7 +10,7 @@ import React, { useEffect, useState } from 'react'
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 
-const index = () => {
+const ListarFuncionarios = () => {
     const [funcionariosData, setFuncionarios] = useState<IFuncionario[]>([])
     const [loading, setloading] = useState(false)
 
@@ -53,4 +53,4 @@ const index = () => {
     )
 }
 
-export default index
+export default ListarFuncionarios
