@@ -1,19 +1,19 @@
 import { IFuncionario } from '@/IFuncionario'
 import Header from '@/components/Header/Header'
 import TableFuncionarios from '@/components/TableFuncionarios'
+import { FuncionarioContext } from '@/context/FuncionarioContext'
 import { Button } from '@mui/material'
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 
 const index = () => {
-    const [funcionarios, setFuncionarios] = useState<IFuncionario[]>([])
+    const [funcionariosData, setFuncionarios] = useState<IFuncionario[]>([])
 
 
     const getFuncionarios = async () => {
         try {
-            const response = await fetch('http://localhost:8080/api/funcionario')
+            const response = await fetch(process.env.NEXT_PUBLIC_API_KEY)
             const data = await response.json()
-            console.log(data)
             setFuncionarios(data.funcionarios)
             return data
         } catch (error) {
@@ -30,10 +30,13 @@ const index = () => {
         <div className='flex flex-col gap-5'>
             <Header />
 
-            <div className='flex flex-col justify-center items-center'>
-                <h1 className='text-3xl font-bold text-primaryColor'>Listar funcionarios</h1>
-                <TableFuncionarios funcionariosData={funcionarios}></TableFuncionarios>
-            </div>
+            <FuncionarioContext.Provider value={{ funcionariosData }}>
+                <div className='flex flex-col justify-center items-center p-5'>
+                    <h1 className='text-3xl font-bold text-primaryColor flex items-center gap-3'>Listar funcionarios <span className='text-lg text-gray-500'>({funcionariosData?.length})</span></h1>
+                    <TableFuncionarios />
+                </div>
+            </FuncionarioContext.Provider>
+
         </div>
     )
 }
