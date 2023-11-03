@@ -1,5 +1,9 @@
 {
+  "engines": {
+    "node": "18.x"
+  },
   "scripts": {
+    "start": "node ./src/index.ts",
     "build": "tsc",
     "dev": "ts-node-dev --respawn --transpile-only src/index.ts"
   },
