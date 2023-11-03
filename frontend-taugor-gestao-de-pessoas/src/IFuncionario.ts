@@ -21,6 +21,7 @@ interface FuncionarioInfo {
     admissioDate: Date;
     sector: string;
     salary: number;
+    isFired?: boolean
 }
 
 interface Histories {
