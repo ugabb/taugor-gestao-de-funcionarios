@@ -10,8 +10,10 @@ export const createFuncionario = async (req: Request, res: Response) => {
         await create(validatedFuncionario);
         return res.status(201).json({ message: 'Funcionário criado com sucesso' });
     } catch (error) {
-        console.error('Data validation error:', error);
-        return res.status(500).json({ message: 'Erro ao criar Funcionário', error: error.message });
+        if (error instanceof Error) {
+            console.error('Data validation error:', error);
+            return res.status(500).json({ message: 'Erro ao criar Funcionário', error: error.message });
+        }
     }
 };
 
@@ -21,8 +23,10 @@ export const getAllFuncionarios = async (req: Request, res: Response) => {
 
         res.status(200).json({ message: 'Funcionários retornado com sucesso', funcionarios: await getAll() });
     } catch (error) {
-        console.error(`Erro ao retornar todos os Funcionários`, error);
-        return res.status(500).send({ message: 'Erro ao retornar Funcionários', error: error.message });
+        if (error instanceof Error) {
+            console.error(`Erro ao retornar todos os Funcionários`, error);
+            return res.status(500).send({ message: 'Erro ao retornar Funcionários', error: error.message });
+        }
     }
 }
 
@@ -32,9 +36,12 @@ export const getFuncionarioById = async (req: Request, res: Response) => {
         const { id } = req.params
         res.status(200).json({ message: 'Funcionário retornado com sucesso', funcionarios: await getById(id) })
     } catch (error) {
-        console.error('Erro ao retornar Funcionário:', error);
-        return res.status(500).send({ message: 'Erro ao retornar Funcionário', error: error.message });
+        if (error instanceof Error) {
+            console.error('Erro ao retornar Funcionário:', error);
+            return res.status(500).send({ message: 'Erro ao retornar Funcionário', error: error.message });
+        }
     }
+
 }
 
 // PATCH -> /api/funcionario/:id
@@ -44,8 +51,11 @@ export const updateFuncionarioById = async (req: Request, res: Response) => {
         const { id } = req.params
         res.status(200).json({ message: 'Funcionário atualizado com sucesso', funcionariosUpdated: await update(id, req.body) })
     } catch (error) {
-        console.log(`Error while updating Funcionario `, error);
-        return res.status(500).send({ message: 'Erro ao atualizar Funcionário', error: error.message });
+        if (error instanceof Error) {
+            console.log(`Error while updating Funcionario `, error);
+            return res.status(500).send({ message: 'Erro ao atualizar Funcionário', error: error.message });
+        }
+
     }
 }
 
@@ -56,8 +66,11 @@ export const deleteFuncionarioById = async (req: Request, res: Response) => {
         await deleteById(id)
         return res.status(200).json({ message: 'Funcionário removido com sucesso' })
     } catch (error) {
-        console.error('Erro ao excluir funcionário:', error);
-        return res.status(500).send({ message: 'Erro ao excluir funcionário', error: error.message });
+        if (error instanceof Error) {
+            console.error('Erro ao excluir funcionário:', error);
+            return res.status(500).send({ message: 'Erro ao excluir funcionário', error: error.message });
+        }
+
     }
 }
 
@@ -69,8 +82,10 @@ export const endFuncionarioContractById = async (req: Request, res: Response) =>
         await endContractById(id)
         res.status(200).json({ message: 'Contrato finalizado com sucesso' })
     } catch (error) {
-        console.log(`Erro ao terminar contrato com funcionário`, error);
-        return res.status(500).send('Erro ao terminar contrato com funcionário');
+        if (error instanceof Error) {
+            console.log(`Erro ao terminar contrato com funcionário`, error.message);
+            return res.status(500).send('Erro ao terminar contrato com funcionário');
+        }
     }
 }
 
@@ -82,7 +97,9 @@ export const fireFuncionarioById = async (req: Request, res: Response) => {
         await fireById(id)
         res.status(200).json({ message: 'Demitido com sucesso' })
     } catch (error) {
-        console.log(`Erro ao Demitir funcionário `, error);
-        return res.status(500).send('Erro ao Demitir funcionário');
+        if (error instanceof Error) {
+            console.log(`Erro ao Demitir funcionário `, error.message);
+            return res.status(500).send('Erro ao Demitir funcionário');
+        }
     }
 }
