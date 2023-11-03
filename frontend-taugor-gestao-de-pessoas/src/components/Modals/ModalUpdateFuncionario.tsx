@@ -1,22 +1,25 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { IFuncionario } from '@/IFuncionario';
-import { FaRegLightbulb } from 'react-icons/fa';
-import { AiOutlineArrowUp } from 'react-icons/ai';
 import { BsToggle2Off } from 'react-icons/bs';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { BiSolidUser } from 'react-icons/bi';
+import axios from 'axios';
+
+import { storage } from '@/firebase';
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
+import ModalConfirmUpdate from './ModalConfirmUpdate';
 
 type Props = {
     openModal: boolean;
     handleOpen: Function
     handleCloseModal: Function
     action: string;
+    funcionarioID: string | undefined;
 }
 
 const style = {
@@ -31,6 +34,7 @@ const style = {
 };
 
 const initialFuncionarioState: IFuncionario = {
+    id: '',
     contatoInfo: {
         name: '',
         lastName: '',
@@ -43,7 +47,7 @@ const initialFuncionarioState: IFuncionario = {
             uf: '',
         },
         phone: '',
-        profilePicture: 'https://s2-techtudo.glbimg.com/O--gZc3kmXYYKUb5nXhEWtoU1E8=/0x0:3840x2160/888x0/smart/filters:strip_icc()/i.s3.glbimg.com/v1/AUTH_08fbf48bc0524877943fe86e43087e7a/internal_photos/bs/2023/c/O/OheNpSSWqaq6RXE6Sojg/marvels-spider-man-2-20231008205118.jpg',
+        profilePicture: '',
         birthday: new Date()
     },
     funcionarioInfo: {
@@ -52,18 +56,77 @@ const initialFuncionarioState: IFuncionario = {
         sector: '',
         salary: 0,
     },
+    funcionarioPDF: '',
+    histories: { user: '' }
 };
 
-const ModalUpdateFuncionario = ({ openModal, handleOpen, handleCloseModal, action }: Props) => {
+const ModalUpdateFuncionario = ({ openModal, handleOpen, handleCloseModal, action, funcionarioID }: Props) => {
     const [funcionario, setFuncionario] = useState<IFuncionario>(initialFuncionarioState)
-    const { register, handleSubmit, formState: { errors } } = useForm<IFuncionario>()
+    const { register, handleSubmit, formState: { errors }, setValue } = useForm<IFuncionario>()
 
+    const handleGetFuncionarioById = async () => {
+        try {
+            const response = await axios.get(`http://localhost:8080/api/funcionario/${funcionarioID}`)
+            const data = response.data
+            setFuncionario(data.funcionarios)
+            // console.log(data.funcionarios.contatoInfo.profilePicture)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    useEffect(() => {
+        handleGetFuncionarioById()
+    }, [])
+    useEffect(() => {
+        if (funcionario) {
+            setValue("contatoInfo.name", funcionario.contatoInfo.name);
+            setValue("contatoInfo.lastName", funcionario.contatoInfo.lastName);
+            setValue("contatoInfo.address.cep", funcionario.contatoInfo.address.cep);
+            setValue("contatoInfo.address.number", funcionario.contatoInfo.address.number);
+            setValue("contatoInfo.address.uf", funcionario.contatoInfo.address.uf);
+            setValue("contatoInfo.address.logradouro", funcionario.contatoInfo.address.logradouro);
+            setValue("contatoInfo.phone", funcionario.contatoInfo.phone);
+            setValue("contatoInfo.email", funcionario.contatoInfo.email);
+            setValue("contatoInfo.gender", funcionario.contatoInfo.gender);
+            setValue("contatoInfo.birthday", funcionario.contatoInfo.birthday);
+            setValue("funcionarioInfo.role", funcionario.funcionarioInfo.role);
+            setValue("funcionarioInfo.sector", funcionario.funcionarioInfo.sector);
+            setValue("funcionarioInfo.salary", funcionario.funcionarioInfo.salary);
+        }
+    }, [funcionario]);
 
     const onSubmit: SubmitHandler<IFuncionario> = (funcionarioData: IFuncionario) => {
-        console.log("Funcionario DATA: ", funcionarioData)
         setFuncionario(funcionarioData)
-        handleOpen()
+        // uploadImage()
+        handleOpenConfirm()
+        console.log("Funcionario DATA: ", funcionarioData)
     }
+
+    const updateFuncionario = async (funcionarioData: IFuncionario, id: string) => {
+        try {
+            console.log("Funcionario PATCH: ", funcionarioData)
+            console.log("Funcionario id: ", id)
+            const response = await axios.patch<IFuncionario>(`${process.env.NEXT_PUBLIC_API_KEY}/${id}`, funcionarioData);
+            console.log(response);
+            return response;
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    //  imagem
+    const [isRounded, setIsRounded] = useState<boolean>(false);
+    const handleRounded = () => {
+        setIsRounded(prev => !prev)
+    }
+
+
+    // modal
+    const [open, setOpen] = React.useState(false);
+    const handleOpenConfirm = () => setOpen(true);
+    const handleClose = () => setOpen(false);
+
     return (
         <Modal
             open={openModal}
@@ -79,14 +142,16 @@ const ModalUpdateFuncionario = ({ openModal, handleOpen, handleCloseModal, actio
                         <div className='flex flex-col lg:gap-5 lg:w-1/2'>
                             <div className='w-full flex flex-col'>
                                 <div className='flex flex-col w-full'>
-                                    <input {...register("contatoInfo.name", { required: false })} type='text' className='input' placeholder='Nome' />
+                                    <label>Nome:</label>
+                                    <input defaultValue={funcionario?.contatoInfo?.name} {...register("contatoInfo.name", { required: true })} type='text' className='input' placeholder='Nome' />
                                     {errors.contatoInfo?.name && <span className='text-red-500 text-xs'>Nome é obrigatório</span>}
                                 </div>
                                 <p className='text-xs text-gray-500'>ex: Tiago</p>
                             </div>
                             <div className='w-full flex flex-col'>
                                 <div className='flex flex-col w-full'>
-                                    <input {...register("contatoInfo.lastName", { required: false })} type='text' className='input' placeholder='Sobrenome' />
+                                    <label>Sobrenome:</label>
+                                    <input defaultValue={funcionario?.contatoInfo?.lastName} {...register("contatoInfo.lastName", { required: true })} type='text' className='input' placeholder='Sobrenome' />
                                     {errors.contatoInfo?.lastName && <span className='text-red-500 text-xs'>Sobrenome é obrigatório</span>}
                                 </div>
                                 <p className='text-xs text-gray-500'>ex: Souza</p>
@@ -95,51 +160,47 @@ const ModalUpdateFuncionario = ({ openModal, handleOpen, handleCloseModal, actio
 
                         {/* FOTO DE PERFIL */}
                         <div className='flex flex-col md:flex-row justify-center  lg:gap-3 lg:w-1/2'>
-                            <div className='px-5 py-10 h-full flex justify-center items-center bg-gray-50 rounded-md'><BiSolidUser className="text-gray-300 text-6xl" /></div>
-                            <div>
-                                <div className='flex items-center gap-3 mb-3'>
-                                    <p className="">Foto do Perfil</p>
-                                    <div className='rounded-full p-1 bg-gray-200'>
-                                        <FaRegLightbulb className="text-gray-400" />
+                            <div className={`h-full flex justify-center items-center  rounded-md`}>
+                                {funcionario?.contatoInfo?.profilePicture ? (
+                                    <div className='flex flex-col gap-3'>
+                                        <img src={funcionario?.contatoInfo?.profilePicture} alt="Selected" className={`h-40 w-40 object-cover ${isRounded ? 'rounded-full' : ''}`} />
+                                        <div className='flex items-center gap-3'>
+                                            {isRounded ? <BsToggle2Off onClick={handleRounded} className="text-3xl text-primaryColor cursor-pointer rotate-180" /> : <BsToggle2Off onClick={handleRounded} className="text-3xl text-gray-400 cursor-pointer" />}
+                                            <p className="text-sm">Foto Redonda</p>
+                                        </div>
                                     </div>
-                                </div>
-                                <div className='flex items-center gap-3'>
-                                    <div className='rounded-full p-1 bg-blue-500'>
-                                        <AiOutlineArrowUp className="text-white" />
-                                    </div>
-                                    <p className="text-sm">Adicionar Foto</p>
-                                </div>
-                                <div className='flex items-center gap-3'>
-                                    <BsToggle2Off className="text-3xl text-gray-400" />
-                                    <p className="text-sm">Foto Redonda</p>
-                                </div>
+                                ) : (
+                                    <BiSolidUser className="text-gray-300 text-6xl" />
+                                )}
                             </div>
                         </div>
-
                     </div>
 
                     <div className='flex flex-col gap-3 w-full'>
-
                         <div className="w-full flex flex-col gap-3">
                             <div className="flex flex-col md:flex-row gap-3 w-full">
                                 <div className='flex flex-col w-full'>
-                                    <input {...register("contatoInfo.address.cep", { required: false })} type='text' className='input w-full' placeholder='CEP' />
+                                    <label>CEP:</label>
+                                    <input defaultValue={funcionario?.contatoInfo?.address?.cep} {...register("contatoInfo.address.cep", { required: true })} type='text' className='input w-full' placeholder='CEP' />
                                     {errors.contatoInfo?.address?.cep && <span className='text-red-500 text-xs'>CEP é obrigatório</span>}
                                 </div>
                                 <div className="flex gap-3">
                                     <div className='flex flex-col w-full'>
-                                        <input {...register("contatoInfo.address.number", { required: false, valueAsNumber: true })} type='number' className='input w-full' placeholder='Número' />
+                                        <label>Número:</label>
+                                        <input defaultValue={funcionario?.contatoInfo?.address?.number} {...register("contatoInfo.address.number", { required: true, valueAsNumber: true })} type='text' className='input w-full' placeholder='Número' />
                                         {errors.contatoInfo?.address?.number && <span className='text-red-500 text-xs'>Número é obrigatório</span>}
                                     </div>
 
                                     <div className='flex flex-col w-full'>
-                                        <input {...register("contatoInfo.address.uf", { required: false })} type='text' className='input w-full' placeholder='UF' />
+                                        <label>UF:</label>
+                                        <input defaultValue={funcionario?.contatoInfo?.address?.uf} {...register("contatoInfo.address.uf", { required: true })} type='text' className='input w-full' placeholder='UF' />
                                         {errors.contatoInfo?.address?.uf && <span className='text-red-500 text-xs'>UF é obrigatório</span>}
                                     </div>
                                 </div>
                             </div>
                             <div className='flex flex-col w-full'>
-                                <input {...register("contatoInfo.address.logradouro", { required: false })} type='text' className='input' placeholder='Logradouro' />
+                                <label>Logradouro:</label>
+                                <input defaultValue={funcionario?.contatoInfo?.address?.logradouro} {...register("contatoInfo.address.logradouro", { required: true })} type='text' className='input' placeholder='Logradouro' />
                                 {errors.contatoInfo?.address?.logradouro && <span className='text-red-500 text-xs'>Logadouro é obrigatório</span>}
                             </div>
                             <p className='text-xs text-gray-500'>ex: Rua 5 de Gotham City</p>
@@ -151,19 +212,22 @@ const ModalUpdateFuncionario = ({ openModal, handleOpen, handleCloseModal, actio
                                 <div className='w-full flex flex-col'>
                                     <div className="flex gap-3">
                                         <div className='flex flex-col w-full'>
-                                            <input {...register("contatoInfo.phone", { required: false })} type='text' className='input w-full' placeholder='Telefone' />
+                                            <label>Telefone:</label>
+                                            <input defaultValue={funcionario?.contatoInfo?.phone} {...register("contatoInfo.phone", { required: true })} type='text' className='input w-full' placeholder='Telefone' />
                                             {errors.contatoInfo?.phone && <span className='text-red-500 text-xs'>Telefone é obrigatório</span>}
                                         </div>
                                         <div className='flex flex-col w-full'>
-                                            <input {...register("contatoInfo.email", { required: false })} type='email' className='input w-full' placeholder='Email' />
+                                            <label>Email:</label>
+                                            <input defaultValue={funcionario?.contatoInfo?.email} {...register("contatoInfo.email", { required: true })} type='email' className='input w-full' placeholder='Email' />
                                             {errors.contatoInfo?.email && <span className='text-red-500 text-xs'>Email é obrigatório</span>}
                                         </div>
 
                                         <div className='flex flex-col w-full'>
-                                            <select {...register("contatoInfo.gender", { required: false })} type='text' className='input w-full' placeholder='Gênero'  >
+                                            <label>Gênero:</label>
+                                            <select value={funcionario?.contatoInfo?.gender}  {...register("contatoInfo.gender", { required: true })} type='text' className='input w-full' placeholder='Gênero'  >
                                                 <option value="">-- Selecione</option>
                                                 <option value="masculino">Masculino</option>
-                                                <option value="feminino">Feminino</option>
+                                                <option defaultValue="feminino">Feminino</option>
                                             </select>
                                             {errors.contatoInfo?.gender && <span className='text-red-500 text-xs'>Gênero é obrigatório</span>}
                                         </div>
@@ -173,11 +237,8 @@ const ModalUpdateFuncionario = ({ openModal, handleOpen, handleCloseModal, actio
                                 <div className='w-full flex flex-col'>
                                     <div className="flex gap-3">
                                         <div className='flex flex-col w-full'>
-                                            <input {...register("funcionarioInfo.admissioDate", { required: false })} type='date' className='input w-full' placeholder='Data de Admissão' />
-                                            {errors.funcionarioInfo?.admissioDate && <span className='text-red-500 text-xs'>Data de Admissão é obrigatório</span>}
-                                        </div>
-                                        <div className='flex flex-col w-full'>
-                                            <input {...register("contatoInfo.birthday", { required: false })} type='date' className='input w-full' placeholder='Data de Nascimento' />
+                                            <label>Data de Nascimento:</label>
+                                            <input defaultValue={funcionario?.contatoInfo?.birthday} {...register("contatoInfo.birthday", { required: true })} type='date' className='input w-full' placeholder='Data de Nascimento' />
                                             {errors.contatoInfo?.birthday && <span className='text-red-500 text-xs'>Data de Nascimento é obrigatório</span>}
                                         </div>
                                     </div>
@@ -187,7 +248,7 @@ const ModalUpdateFuncionario = ({ openModal, handleOpen, handleCloseModal, actio
                         </div>
                     </div>
 
-                    <Button type='submit' variant='outlined'>Salvar</Button>
+                    <Button type='submit' variant='outlined' onClick={handleOpenConfirm}>Salvar</Button>
                 </form>}
 
                 {/* PROMOVER */}
@@ -197,17 +258,20 @@ const ModalUpdateFuncionario = ({ openModal, handleOpen, handleCloseModal, actio
                             <div className="w-full flex flex-col">
                                 <div className="flex flex-col md:flex-row gap-3">
                                     <div className='flex flex-col w-full'>
-                                        <input {...register("funcionarioInfo.role", { required: true })} type='text' className={`input  `} placeholder='Cargo' />
+                                        <label>Cargo:</label>
+                                        <input defaultValue={funcionario?.funcionarioInfo?.role} {...register("funcionarioInfo.role", { required: true })} type='text' className={`input value={funcionario.contatoInfo}  `} placeholder='Cargo' />
                                         {errors.funcionarioInfo?.role && <span className='text-red-500 text-xs'>Cargo é obrigatório</span>}
                                     </div>
 
                                     <div className='flex flex-col w-full'>
-                                        <input {...register("funcionarioInfo.sector", { required: true })} type='text' className='input w-full' placeholder='Setor' />
+                                        <label>Setor:</label>
+                                        <input defaultValue={funcionario?.funcionarioInfo?.sector} {...register("funcionarioInfo.sector", { required: true })} type='text' className='input value={funcionario.contatoInfo} w-full' placeholder='Setor' />
                                         {errors.funcionarioInfo?.sector && <span className='text-red-500 text-xs'>Setor é obrigatório</span>}
                                     </div>
 
                                     <div className='flex flex-col w-full'>
-                                        <input {...register("funcionarioInfo.salary", { required: true, valueAsNumber: true })} type='number' className='input w-full' placeholder='Salário' />
+                                        <label>Salário:</label>
+                                        <input defaultValue={funcionario?.funcionarioInfo?.salary} {...register("funcionarioInfo.salary", { required: true, valueAsNumber: true })} type='text' className='input w-full' placeholder='Salário' />
                                         {errors.funcionarioInfo?.salary && <span className='text-red-500 text-xs'>Salário é obrigatório</span>}
                                     </div>
                                 </div>
@@ -218,7 +282,10 @@ const ModalUpdateFuncionario = ({ openModal, handleOpen, handleCloseModal, actio
 
                     <Button type='submit' variant='outlined'>Salvar</Button>
                 </form>}
+                {!Object.keys(errors).length && (open) && <ModalConfirmUpdate funcionarioID={funcionarioID} funcionario={funcionario} updateFuncionario={updateFuncionario} handleClose={handleClose} handleOpen={handleOpenConfirm} open={open} />}
             </Box>
+
+
         </Modal>
     )
 }
