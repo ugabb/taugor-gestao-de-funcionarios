@@ -27,6 +27,7 @@
 
 ## Sobre o Projeto
 
+![taugor-site](https://github.com/ugabb/taugor-gestao-de-funcionarios/assets/76067595/50f8de82-e2af-450d-a1e8-56ac807632d8)
 
 
 O projeto foi desenvolvido utilizando um conjunto de tecnologias modernas e robustas. No lado do front-end, optei por implementar a aplicação com Next.js, Tailwind CSS, React Hook Form e jsPDF.    <br />
