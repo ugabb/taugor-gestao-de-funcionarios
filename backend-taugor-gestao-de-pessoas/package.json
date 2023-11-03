@@ -3,7 +3,7 @@
     "node": "18.x"
   },
   "scripts": {
-    "start": "node ./src/index.ts",
+    "start": "node dist/index.ts",
     "build": "tsc",
     "dev": "ts-node-dev --respawn --transpile-only src/index.ts"
   },
@@ -15,6 +15,7 @@
     "firebase": "^10.5.0",
     "firebase-admin": "^11.11.0",
     "ts-node-dev": "^2.0.0",
+    "vercel": "^32.5.0",
     "zod": "^3.22.4"
   },
   "devDependencies": {
