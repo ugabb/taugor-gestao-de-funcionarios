@@ -6,7 +6,6 @@ import { signInWithEmailAndPassword } from 'firebase/auth'
 import Link from 'next/link'
 // next
 import { useRouter } from 'next/navigation'
-import { redirect } from 'next/navigation'
 
 import React from 'react'
 import { useForm } from 'react-hook-form'

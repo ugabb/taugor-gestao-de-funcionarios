@@ -9,6 +9,7 @@ import { Button, TextField } from '@mui/material'
 
 // hook forms
 import { useForm } from 'react-hook-form'
+import { useRouter } from 'next/router.js'
 
 
 interface ISignUp {
@@ -22,24 +23,30 @@ const index = () => {
 
     const { register, handleSubmit } = useForm()
 
+    const router = useRouter()
+
     const onSubmit = (signUpData: any) => {
         if (signUpData.password !== signUpData.confirmPassword) {
             alert("Senhas não são iguais")
-
         } else {
             const { email, password } = signUpData
             createUserWithEmailAndPassword(auth, email, password)
                 .then((userCredentials) => {
                     alert("Usuário cadastrado com Sucesso")
+                    router.push("/login")
+                    // console.log(userCredentials)
                     return (
                         <div>
                             <h1>Cadastrado com Sucesso</h1>
                         </div>
                     )
-                    console.log(userCredentials)
                 }).catch((error) => {
                     console.log(error)
-                    alert("Email já em uso")
+                    if (error.code == 'auth/weak-password') {
+                        alert("Senha deve ter no mínimo 6 caracteres")
+                    } else if (error.code == 'auth/email-already-in-use') {
+                        alert("Email já em uso")
+                    }
                     return (
                         <div>
                             <h1>Cadastrado com Sucesso</h1>
