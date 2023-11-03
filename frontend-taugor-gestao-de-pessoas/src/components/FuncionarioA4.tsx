@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from 'react'
 // gerar PDF
 import html2canvas from 'html2canvas'
 import jsPDF from 'jspdf'
+import Image from 'next/image'
 
 type Props = {
     funcionario: IFuncionario
@@ -23,7 +24,7 @@ const FuncionarioA4 = ({ funcionario, profilePicture, isRounded }: Props) => {
                 <div className='without-border-top px-3 pb-5 flex flex-col gap-5'>
                     {profilePicture &&
                         <div className='flex justify-center items-center'>
-                            <img className={`w-40 h-40 object-cover ${isRounded ? 'rounded-full' : ''}`} src={profilePicture} alt='profile picture' />
+                            <Image className={`w-40 h-40 object-cover ${isRounded ? 'rounded-full' : ''}`} src={profilePicture} alt='profile picture' />
                         </div>
                     }
                     <div>

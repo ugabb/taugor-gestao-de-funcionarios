@@ -33,6 +33,7 @@ import jsPDF from 'jspdf'
 
 
 import { getStates } from '@brazilian-utils/brazilian-utils';
+import Image from 'next/image'
 
 const initialFuncionarioState: IFuncionario = {
   contatoInfo: {
@@ -62,7 +63,7 @@ const initialFuncionarioState: IFuncionario = {
   }
 };
 
-const index = () => {
+const CadastrarFuncionario = () => {
   const { register, handleSubmit, formState: { errors } } = useForm<IFuncionario>()
 
   const ufs = getStates()
@@ -71,44 +72,35 @@ const index = () => {
   const [funcionario, setFuncionario] = useState<IFuncionario>(initialFuncionarioState)
   const createFuncionario = async (funcionarioData: IFuncionario) => {
     try {
-      console.log("Funcionario POST: ", funcionarioData)
-      console.log("Funcionario PDF: ", funcionarioPdfUrl)
-      console.log("Funcionario Picture: ", pictureURL)
-      const response = await axios.post<IFuncionario>(process.env.NEXT_PUBLIC_API_KEY, {
-        contatoInfo: {
-          name: funcionarioData.contatoInfo.name,
-          lastName: funcionarioData.contatoInfo.lastName,
-          email: funcionarioData.contatoInfo.email,
-          gender: funcionarioData.contatoInfo.gender,
-          address: {
-            cep: funcionarioData.contatoInfo.address.cep,
-            logradouro: funcionarioData.contatoInfo.address.logradouro,
-            number: Number(funcionarioData.contatoInfo.address.number),
-            uf: funcionarioData.contatoInfo.address.uf,
+      if (process.env.NEXT_PUBLIC_API_KEY) {
+        const response = await axios.post<IFuncionario>(process.env.NEXT_PUBLIC_API_KEY, {
+          contatoInfo: {
+            name: funcionarioData.contatoInfo.name,
+            lastName: funcionarioData.contatoInfo.lastName,
+            email: funcionarioData.contatoInfo.email,
+            gender: funcionarioData.contatoInfo.gender,
+            address: {
+              cep: funcionarioData.contatoInfo.address.cep,
+              logradouro: funcionarioData.contatoInfo.address.logradouro,
+              number: Number(funcionarioData.contatoInfo.address.number),
+              uf: funcionarioData.contatoInfo.address.uf,
+            },
+            phone: funcionarioData.contatoInfo.phone,
+            profilePicture: pictureURL,
+            birthday: funcionarioData.contatoInfo.birthday,
           },
-          phone: funcionarioData.contatoInfo.phone,
-          profilePicture: pictureURL,
-          birthday: funcionarioData.contatoInfo.birthday,
-        },
-        funcionarioInfo: {
-          role: funcionarioData.funcionarioInfo.role,
-          admissioDate: funcionarioData.funcionarioInfo.admissioDate,
-          sector: funcionarioData.funcionarioInfo.sector,
-          salary: Number(funcionarioData.funcionarioInfo.salary),
-        },
-        funcionarioPDF: funcionarioPdfUrl
-      });
-      console.log(response);
-
-      // if (response.status == 201) {
-      //   return (
-      //     <div className='absolute inset-0 flex items-center justify-center bg-white p-10'>
-      //       <h1 className='text-blue-600 text-xl font-bold'>Funcionário Criado com sucesso!</h1>
-      //     </div>
-      //   )
-      // }
-      return response;
+          funcionarioInfo: {
+            role: funcionarioData.funcionarioInfo.role,
+            admissioDate: funcionarioData.funcionarioInfo.admissioDate,
+            sector: funcionarioData.funcionarioInfo.sector,
+            salary: Number(funcionarioData.funcionarioInfo.salary),
+          },
+          funcionarioPDF: funcionarioPdfUrl
+        });
+        return response;
+      }
     } catch (error) {
+      alert("Error ao Criar Funcionário")
       console.log(error);
     }
   };
@@ -116,7 +108,6 @@ const index = () => {
 
 
   const onSubmit: SubmitHandler<IFuncionario> = (funcionarioData: IFuncionario) => {
-    console.log("Funcionario DATA: ", funcionarioData)
     setFuncionario(funcionarioData)
     uploadImage();
     generateAndUploadPdf()
@@ -157,7 +148,6 @@ const index = () => {
         },
       }));
     }
-    console.log(funcionario.contatoInfo.profilePicture)
   };
 
 
@@ -181,7 +171,6 @@ const index = () => {
         }
       }));
 
-      console.log(picture);
       if (picture) {
         const imageUrl = URL.createObjectURL(picture);
         setSelectedImage(imageUrl);
@@ -230,7 +219,6 @@ const index = () => {
         await uploadBytes(pdfRef, pdfData);
         const pdfURL = await getDownloadURL(pdfRef);
         setFuncionarioPDFUrl(pdfURL);
-        console.log('PDF URL:', pdfURL);
       }
     }
   };
@@ -275,7 +263,7 @@ const index = () => {
                 <div className={`${selectedImage ? '' : 'px-5 py-10 bg-gray-50'} h-full flex justify-center items-center  rounded-md`}>
                   {selectedImage ? (
                     <div className='flex flex-col gap-3'>
-                      <img src={selectedImage} alt="Selected" className={`h-40 w-40 object-cover ${isRounded ? 'rounded-full' : ''}`} />
+                      <Image src={selectedImage} alt="Selected" className={`h-40 w-40 object-cover ${isRounded ? 'rounded-full' : ''}`} />
                       <div className='flex items-center gap-3'>
                         {isRounded ? <BsToggle2Off onClick={handleRounded} className="text-3xl text-primaryColor cursor-pointer rotate-180" /> : <BsToggle2Off onClick={handleRounded} className="text-3xl text-gray-400 cursor-pointer" />}
                         <p className="text-sm">Foto Redonda</p>
@@ -425,4 +413,4 @@ const index = () => {
   )
 }
 
-export default index
+export default CadastrarFuncionario

@@ -8,6 +8,7 @@ import Header from '@/components/Header/Header';
 import { User, onAuthStateChanged } from 'firebase/auth';
 import { auth } from '@/firebase';
 import { BsGithub, BsLinkedin } from 'react-icons/bs';
+import Image from 'next/image';
 
 export default function Home() {
   const [authUser, setAuthUser] = useState<User | null>(null); // Inicializando com tipo 'User | null'
@@ -61,7 +62,7 @@ export default function Home() {
               </div>
             </div>
             <div className='flex flex-col text-center gap-3'>
-              <img className='w-[400px] h-[400px] object-cover rounded-full' src="https://images.unsplash.com/photo-1560250056-07ba64664864?auto=format&fit=crop&q=80&w=1451&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="" />
+              <Image className='w-[400px] h-[400px] object-cover rounded-full' src="https://images.unsplash.com/photo-1560250056-07ba64664864?auto=format&fit=crop&q=80&w=1451&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="" />
             </div>
           </div>
         ) : (
