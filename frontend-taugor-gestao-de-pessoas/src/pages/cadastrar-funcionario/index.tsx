@@ -131,6 +131,7 @@ const CadastrarFuncionario = () => {
       setFuncionario((prevState) => ({
         ...prevState,
         [parent]: {
+          // @ts-ignore
           ...prevState[parent as keyof typeof prevState],
           [child]: value,
         },
@@ -140,8 +141,10 @@ const CadastrarFuncionario = () => {
       setFuncionario((prevState) => ({
         ...prevState,
         [parent]: {
+          // @ts-ignore
           ...prevState[parent as keyof typeof prevState],
           [child]: {
+            // @ts-ignore
             ...prevState[parent as keyof typeof prevState][child],
             [subChild]: value,
           },
@@ -160,7 +163,7 @@ const CadastrarFuncionario = () => {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [isRounded, setIsRounded] = useState<boolean>(false);
   const [pictureURL, setPictureURL] = useState<string>("");
-  function handleSelectedPicture(e: ChangeEvent<HTMLInputElement>) {
+  function handleSelectedPicture(e: React.ChangeEvent<HTMLInputElement>) {
     if (e.target.files && e.target.files.length > 0) {
       const picture = e.target.files[0];
       setFuncionario((prev) => ({
@@ -263,7 +266,7 @@ const CadastrarFuncionario = () => {
                 <div className={`${selectedImage ? '' : 'px-5 py-10 bg-gray-50'} h-full flex justify-center items-center  rounded-md`}>
                   {selectedImage ? (
                     <div className='flex flex-col gap-3'>
-                      <Image width={1000} height={1000}  src={selectedImage} alt="Selected" className={`h-40 w-40 object-cover ${isRounded ? 'rounded-full' : ''}`} />
+                      <Image width={1000} height={1000} src={selectedImage} alt="Selected" className={`h-40 w-40 object-cover ${isRounded ? 'rounded-full' : ''}`} />
                       <div className='flex items-center gap-3'>
                         {isRounded ? <BsToggle2Off onClick={handleRounded} className="text-3xl text-primaryColor cursor-pointer rotate-180" /> : <BsToggle2Off onClick={handleRounded} className="text-3xl text-gray-400 cursor-pointer" />}
                         <p className="text-sm">Foto Redonda</p>
@@ -293,6 +296,7 @@ const CadastrarFuncionario = () => {
                           <input
                             type='file'
                             id='upload-photo'
+                            // @ts-ignore
                             onChangeCapture={(e) => handleSelectedPicture(e)}
                             style={{ display: 'none' }}
                             {...register("contatoInfo.profilePicture")}
@@ -340,10 +344,11 @@ const CadastrarFuncionario = () => {
                       {errors.contatoInfo?.address?.number && <span className='text-red-500 text-xs'>Número é obrigatório</span>}
                     </div>
 
+                    {/* @ts-ignore */}
                     <select {...register("contatoInfo.address.uf", { required: true })} type='text' className='input w-full' placeholder='Gênero' onChange={syncronizeWithDocument} >
                       <option value="">-- Selecione</option>
                       {ufs.map((uf) => (
-                        <option key={uf} value={uf.code}>{uf.code}</option>
+                        <option key={uf.code.toString()} value={uf.code}>{uf.code}</option>
                       ))}
                     </select>
                   </div>
@@ -370,6 +375,7 @@ const CadastrarFuncionario = () => {
                       </div>
 
                       <div className='flex flex-col w-full'>
+                        {/* @ts-ignore */}
                         <select {...register("contatoInfo.gender", { required: true })} type='text' className='input w-full' placeholder='Gênero' onChange={syncronizeWithDocument} >
                           <option value="">-- Selecione</option>
                           <option value="masculino">Masculino</option>
@@ -402,10 +408,7 @@ const CadastrarFuncionario = () => {
         </section>
 
 
-
-        <FuncionarioA4 funcionario={funcionario} profilePicture={selectedImage} isRounded={isRounded} />
-
-
+        {typeof selectedImage == 'string' && <FuncionarioA4 funcionario={funcionario} profilePicture={selectedImage} isRounded={isRounded} />}
 
       </main>
       {(open && pictureURL != '' && funcionarioPdfUrl != '') && <ModalCreateFuncionario funcionario={funcionario} createFuncionario={createFuncionario} handleClose={handleClose} handleOpen={handleOpen} open={open} />}

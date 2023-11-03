@@ -220,7 +220,7 @@ const ModalUpdateFuncionario = ({ openModal, handleOpen, handleCloseModal, actio
 
                                         <div className='flex flex-col w-full'>
                                             <label>Gênero:</label>
-                                            <select value={funcionario?.contatoInfo?.gender}  {...register("contatoInfo.gender", { required: true })} type='text' className='input w-full' placeholder='Gênero'  >
+                                            <select value={funcionario?.contatoInfo?.gender}  {...register("contatoInfo.gender", { required: true })}  className='input w-full' placeholder='Gênero'  >
                                                 <option value="">-- Selecione</option>
                                                 <option value="masculino">Masculino</option>
                                                 <option defaultValue="feminino">Feminino</option>
@@ -234,7 +234,7 @@ const ModalUpdateFuncionario = ({ openModal, handleOpen, handleCloseModal, actio
                                     <div className="flex gap-3">
                                         <div className='flex flex-col w-full'>
                                             <label>Data de Nascimento:</label>
-                                            <input defaultValue={funcionario?.contatoInfo?.birthday} {...register("contatoInfo.birthday", { required: true })} type='date' className='input w-full' placeholder='Data de Nascimento' />
+                                            <input {...register("contatoInfo.birthday", { required: true })} type='date' className='input w-full' placeholder='Data de Nascimento' />
                                             {errors.contatoInfo?.birthday && <span className='text-red-500 text-xs'>Data de Nascimento é obrigatório</span>}
                                         </div>
                                     </div>
@@ -278,7 +278,7 @@ const ModalUpdateFuncionario = ({ openModal, handleOpen, handleCloseModal, actio
 
                     <Button type='submit' variant='outlined'>Salvar</Button>
                 </form>}
-                {!Object.keys(errors).length && (open) && <ModalConfirmUpdate funcionarioID={funcionarioID} funcionario={funcionario} updateFuncionario={updateFuncionario} handleClose={handleClose} handleOpen={handleOpenConfirm} open={open} />}
+                {!Object.keys(errors).length && (open) && typeof funcionarioID == 'string' && <ModalConfirmUpdate funcionarioID={funcionarioID} funcionario={funcionario} updateFuncionario={updateFuncionario} handleClose={handleClose} handleOpen={handleOpenConfirm} open={open} />}
             </Box>
 
 
