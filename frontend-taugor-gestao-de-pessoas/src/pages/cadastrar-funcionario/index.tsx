@@ -343,7 +343,7 @@ const CadastrarFuncionario = () => {
                     <select {...register("contatoInfo.address.uf", { required: true })} type='text' className='input w-full' placeholder='Gênero' onChange={syncronizeWithDocument} >
                       <option value="">-- Selecione</option>
                       {ufs.map((uf) => (
-                        <option value={uf.code}>{uf.code}</option>
+                        <option key={uf} value={uf.code}>{uf.code}</option>
                       ))}
                     </select>
                   </div>
