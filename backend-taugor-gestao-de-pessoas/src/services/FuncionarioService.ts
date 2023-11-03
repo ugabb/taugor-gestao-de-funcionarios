@@ -41,27 +41,33 @@ export const getAll = async () => {
 
 export const getById = async (id: string) => {
     try {
-        const funcionarioRef = db.collection("funcionario").doc(id)
-        const funcionario = await funcionarioRef.get()
+        const funcionarioRef = db.collection("funcionario").doc(id);
+        const funcionario = await funcionarioRef.get();
 
         if (!funcionario.exists) {
-            throw new Error("Nenhum funcionário com esse ID!")
+            throw new Error("Nenhum funcionário com esse ID!");
         }
 
-        return funcionario.data()
+        const funcionarioData = funcionario.data();
+        if (funcionarioData) {
+            return { id: funcionario.id, ...funcionarioData };
+        } else {
+            throw new Error("Nenhum dado encontrado para este funcionário!");
+        }
     } catch (error) {
         console.error('Erro ao buscar funcionário por ID:', error);
         throw error;
     }
 }
 
+
 export const update = async (id: string, data: any) => {
     try {
         const funcionarioRef = db.collection("funcionario").doc(id)
         // atualizar apenas os campos especificados sem substituir o documento inteiro
         await funcionarioRef.set(data, { merge: true })
-        const funcionario = await funcionarioRef.get()
-        return funcionario.data()
+
+        return data
     } catch (error) {
         console.error('Erro ao buscar funcionário por ID:', error);
         throw error;
