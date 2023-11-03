@@ -12,14 +12,7 @@ import { useForm } from 'react-hook-form'
 import { useRouter } from 'next/router.js'
 
 
-interface ISignUp {
-    email: string;
-    password: string;
-    confirmPassword: string;
-}
-
-const index = () => {
-    // criar loading...
+const SignUp = () => {
 
     const { register, handleSubmit } = useForm()
 
@@ -34,7 +27,6 @@ const index = () => {
                 .then((userCredentials) => {
                     alert("Usuário cadastrado com Sucesso")
                     router.push("/login")
-                    // console.log(userCredentials)
                     return (
                         <div>
                             <h1>Cadastrado com Sucesso</h1>
@@ -53,9 +45,6 @@ const index = () => {
                         </div>
                     )
                 })
-
-
-            console.log(signUpData)
         }
     }
 
@@ -102,4 +91,4 @@ const index = () => {
     )
 }
 
-export default index
+export default SignUp

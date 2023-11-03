@@ -18,7 +18,6 @@ const Login = () => {
     const { email, password } = logInData
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        console.log(userCredential)
         router.push('/')
       }).catch((error) => {
         alert("Usuário não existe!")

@@ -35,7 +35,6 @@ const MenuDrop = ({ anchorEl, open, handleClose, handleClick, funcionarioID }: P
     const demitirFuncionario = async () => {
         try {
             const response = await axios.patch(`${process.env.NEXT_PUBLIC_API_KEY}/fire/${funcionarioID}`)
-            console.log(response)
             return response
         } catch (error) {
             console.log(error)

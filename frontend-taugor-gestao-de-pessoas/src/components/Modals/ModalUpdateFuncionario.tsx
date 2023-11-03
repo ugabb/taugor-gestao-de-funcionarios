@@ -70,7 +70,6 @@ const ModalUpdateFuncionario = ({ openModal, handleOpen, handleCloseModal, actio
             const response = await axios.get(`${process.env.NEXT_PUBLIC_API_KEY}/${funcionarioID}`)
             const data = response.data
             setFuncionario(data.funcionarios)
-            // console.log(data.funcionarios.contatoInfo.profilePicture)
         } catch (error) {
             console.log(error)
         }
@@ -101,15 +100,11 @@ const ModalUpdateFuncionario = ({ openModal, handleOpen, handleCloseModal, actio
         setFuncionario(funcionarioData)
         // uploadImage()
         handleOpenConfirm()
-        console.log("Funcionario DATA: ", funcionarioData)
     }
 
     const updateFuncionario = async (funcionarioData: IFuncionario, id: string) => {
         try {
-            console.log("Funcionario PATCH: ", funcionarioData)
-            console.log("Funcionario id: ", id)
             const response = await axios.patch<IFuncionario>(`${process.env.NEXT_PUBLIC_API_KEY}/${id}`, funcionarioData);
-            console.log(response);
             return response;
         } catch (error) {
             console.log(error);
